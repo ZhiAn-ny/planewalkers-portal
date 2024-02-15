@@ -53,11 +53,11 @@
 
     // UTILITY & SECURITY
     
-    function getUser(string $userOrEmail, $mysqli) {
-        $qry = "SELECT id, username, password, salt FROM members 
-                WHERE email = ? OR username = ? LIMIT 1";
+    function getUserLogin(string $user_id, $mysqli) {
+        $qry = "SELECT password, salt FROM members 
+                WHERE id = ? LIMIT 1";
         if ($stmt = $mysqli->prepare($qry)) { 
-            $stmt->bind_param('ss', $userOrEmail, $userOrEmail);
+            $stmt->bind_param('i', $user_id);
             $stmt->execute();
             $stmt->store_result(); 
             return $stmt;
@@ -132,19 +132,20 @@
             && !isUsernameTaken($userOrEmail)) {
                 return "Credentials not correct.";
         }
-        $stmt = getUser($userOrEmail, $mysqli);
+        $user = getUser($userOrEmail, $mysqli);
 
-        if ($stmt != null) {
-            $stmt->bind_result($user_id, $username, $db_password, $salt);
+        if ($user != null) {
+            $stmt = getUserLogin($user->getID(), $mysqli);
+            $stmt->bind_result($db_password, $salt);
             $stmt->fetch();
             $password = hash('sha512', $password.$salt);
 
-            if ($stmt->num_rows == 1 && !isBruteTry($user_id, $mysqli)) {
+            if ($stmt->num_rows == 1 && !isBruteTry($user->getID(), $mysqli)) {
                 if($db_password == $password) { 
                     $user_browser = $_SERVER['HTTP_USER_AGENT']; 
                     // Recupero il parametro 'user-agent' relativo all'utente corrente.
                     // ci proteggiamo da un attacco XSS
-                    $user_id = preg_replace("/[^0-9]+/", "", $user_id);
+                    $user_id = preg_replace("/[^0-9]+/", "", $user->getID());
                     $_SESSION['user_id'] = $user_id; 
                     $username = preg_replace("/[^a-zA-Z0-9_\-]+/", "", $username);
                     $_SESSION['username'] = $username;
@@ -153,8 +154,7 @@
                     redirect($home);
                     exit();
                 } else {
-                    registerFailedLogin($user_id, $mysqli);
-                    return "pwd not correct"; 
+                    registerFailedLogin($user->getID(), $mysqli);
                 }
             } else {
                 return "is brute";
