@@ -6,6 +6,7 @@
     <!-- <link href="./home.css" rel="stylesheet" type="text/css"/> -->
     <link href="../../assets/css/global.css" rel="stylesheet" type="text/css"/>
     <!-- <script src="../components/componentModule.js" type="module"></script> -->
+    <script src="dashboard.js" type="text/javascript"></script>
     <script src="https://kit.fontawesome.com/93710f8f6f.js" crossorigin="anonymous"></script>
     <!--<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" type="text/javascript"></script> -->
     <title>Planeswalker's Portal</title>

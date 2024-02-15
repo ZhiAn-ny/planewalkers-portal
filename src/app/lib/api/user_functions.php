@@ -15,16 +15,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($action == 'get') {
             $username = $decodedData['username'] ?? $_SESSION['username'];
-            $res = getUser($username);
-            $response['message'] = json_encode($res);
+            $response['sessionStatus'] = session_status();
+            $response['usr'] = $username;
+            // $res = getUser($username);
+            // if (is_string($res)) {
+            //     $response['status'] = 5<<00;
+            //     throw new Exception('Error:' . $res);
+            // } 
+            //$response['message'] = json_encode($res);
         }
         else if ($action == 'update') {
+            $response['message'] = 'update';
+        } else {
+            $response['message'] = 'else';
 
         }
-
         $response['status'] = 200;
         $response['ok'] = true;
     } catch (\Exception $e) {
+        $response['status'] = 500;
         $response['ok'] = false;
         $response['message'] = $e.getMessage();        
     }
