@@ -1,6 +1,6 @@
 <?php
 require "inc_db_connection.php";
-require "../models/user.php";
+require "../../models/user.php";
 
 if (!defined('INC_USR')) {
     define('INC_USR', true);

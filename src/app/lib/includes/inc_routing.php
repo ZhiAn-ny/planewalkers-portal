@@ -1,4 +1,6 @@
 <?php
+require "inc_db_connection.php";
+sec_session_start();
 
 if (!defined('INC_ROUTING')) {
     define('INC_ROUTING', true);
