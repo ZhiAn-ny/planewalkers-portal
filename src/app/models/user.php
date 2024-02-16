@@ -16,6 +16,7 @@ if (!defined('URS_MODEL')) {
             $this->username = $username;
             $this->since = $since;
             $this->name = $name;
+            $this->email = $email;
             $this->xp = $xp;
             $this->bio = $bio;
         }
@@ -48,6 +49,17 @@ if (!defined('URS_MODEL')) {
             else if ($this->xp < 305000) return 18;
             else if ($this->xp < 355000) return 19;
             else return 20;
+        }
+
+        function toString(): string {
+            return '{ "id": '.$this->id.', '.
+                '"username": "'.$this->username.'", '.
+                '"since": "'.$this->since.'", '.
+                '"name": "'.$this->name.'", '.
+                '"email": "'.$this->email.'", '.
+                '"bio": "'.$this->bio.'", '.
+                '"xp": '.$this->xp.' '.
+            '}';
         }
         
     }

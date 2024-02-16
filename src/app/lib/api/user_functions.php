@@ -1,5 +1,5 @@
 <?php
-require "includes/inc_user.php";
+require "../includes/inc_user.php";
 sec_session_start();
 
 $response = array();
@@ -14,15 +14,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $action = $decodedData['action'] ?? '';
 
         if ($action == 'get') {
-            $username = $decodedData['username'] ?? $_SESSION['username'];
-            $response['sessionStatus'] = session_status();
+            $username = $decodedData['username'];
+            if ($username == null || $username == '') {
+                $username = $_SESSION['username'];
+            }
+            $res = getUser($username);
+            $response['message'] = $res->toString();
             $response['usr'] = $username;
-            // $res = getUser($username);
-            // if (is_string($res)) {
-            //     $response['status'] = 5<<00;
-            //     throw new Exception('Error:' . $res);
-            // } 
-            //$response['message'] = json_encode($res);
         }
         else if ($action == 'update') {
             $response['message'] = 'update';

@@ -1,8 +1,15 @@
-const greetUser = document.getElementById("greetings");
-const greetingsList = ["Hi", "Hello", "May the light shine upon you,", "Long time no see,"];
 
-let greet = greetingsList[Math.floor(Math.random()*greetingsList.length)];
-let user;
+
+function setGreetings(user) {
+    const greetingsList = [
+        "Hi", "Hello", "Greetings", "May the light shine upon you,",
+        "Long time no see,", "Nice to see you,"
+    ];
+    const greet = greetingsList[Math.floor(Math.random()*greetingsList.length)];
+    const name = user.name ? user.name : user.username;
+    const greetUser = document.getElementById("greetings");
+    greetUser.innerText = greet + " " + name;
+}
 
 const params = { action: 'get', username: '' };
 fetch('http://localhost/pwp/src/app/lib/api/user_functions.php', {
@@ -15,8 +22,7 @@ fetch('http://localhost/pwp/src/app/lib/api/user_functions.php', {
     }
     return response.json();
 }).then(response => {
-    console.log(response);
-    // user = JSON.parse(response.message);
+    user = JSON.parse(response.message);
+    setGreetings(user);
 }).catch(error => console.error(error));
 
-//greetUser.innerText = greet + 
