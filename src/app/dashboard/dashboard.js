@@ -12,7 +12,7 @@ function setGreetings(user) {
 }
 
 const params = { action: 'get', username: '' };
-fetch('http://localhost/pwp/src/app/lib/api/user_functions.php', {
+fetch('http://localhost/pwp/src/app/lib/user_functions.php', {
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     body: JSON.stringify(params)

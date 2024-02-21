@@ -1,5 +1,5 @@
 <?php
-    require "../lib/auth_functions.php";
+    require "../lib/inc_auth.php";
     if (isset($_POST['submit'])) {
         $resp = register($_POST['email'], $_POST['username'], $_POST['password'], $_POST['confirmPassword']);
     }

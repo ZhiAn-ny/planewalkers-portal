@@ -1,6 +1,6 @@
 <?php
-    require "includes/inc_user.php";
-    require "includes/inc_routing.php";
+    require "inc_user.php";
+    require "inc_routing.php";
 
     //// ARGS CHECKS
 

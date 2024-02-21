@@ -1,5 +1,5 @@
 <?php
-require "../includes/inc_user.php";
+require "inc_user.php";
 sec_session_start();
 
 $response = array();
