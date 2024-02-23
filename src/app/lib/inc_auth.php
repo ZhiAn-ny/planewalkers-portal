@@ -5,24 +5,26 @@
     //// ARGS CHECKS
 
     function checkEmail(string $email, $mysqli, string $err): string {
+        $userManager = new UserManager();
         if ($err != "") {
             return $err;
         }
         $email = strtolower($email);
-        if (emailExists($email, $mysqli)) {
+        if ($userManager->emailExists($email, $mysqli)) {
             return "Email already exists.";
         }
         return "";
     }
     
     function checkUsername(string $username, $mysqli, string $err): string {
+        $userManager = new UserManager();
         if ($err != "") {
             return $err;
         }
         if (strlen($username) > 30) {
             return "Username too long.";
         }
-        if (isUsernameTaken($username, $mysqli)) {
+        if ($userManager->isUsernameTaken($username, $mysqli)) {
             return "Username already taken.";
         }
         return "";
@@ -108,7 +110,7 @@
             $insert_stmt->bind_param('ssss', $username, $email, $hashedPassword, $random_salt); 
             $insert_stmt->execute();
             if ($insert_stmt->affected_rows == 1) {
-                redirect(Pages::Home);
+                redirect(Pages::HOME);
                 exit();
             }
         }
@@ -116,6 +118,7 @@
     }
 
     function login(string $userOrEmail, string $password) {
+        $userManager = new UserManager();
         $userOrEmail = trim($userOrEmail);
         $password = trim($password);
         if ($userOrEmail === ""|| $password === "") {
@@ -128,11 +131,11 @@
         if (!$mysqli) {
             return "Connection failed.";
         }
-        if (!emailExists($userOrEmail) 
-            && !isUsernameTaken($userOrEmail)) {
+        if (!$userManager->emailExists($userOrEmail) 
+            && !$userManager->isUsernameTaken($userOrEmail)) {
                 return "Credentials not correct.";
         }
-        $user = getUser($userOrEmail, $mysqli);
+        $user = $userManager->getUser($userOrEmail, $mysqli);
 
         if ($user != null) {
             $stmt = getUserLogin($user->getID(), $mysqli);
@@ -150,8 +153,7 @@
                     $_SESSION['user_id'] = $user_id; 
                     $_SESSION['username'] = $username;
                     $_SESSION['login_string'] = hash('sha512', $password.$user_browser);
-                    $home = Pages::Home;
-                    redirect($home);
+                    redirect(Pages::HOME);
                     exit();
                 } else {
                     registerFailedLogin($user->getID(), $mysqli);

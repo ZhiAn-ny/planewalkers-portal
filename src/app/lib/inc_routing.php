@@ -6,43 +6,28 @@ if (!defined('INC_ROUTING')) {
     define('INC_ROUTING', true);
 
     enum Pages: int {
-        case NotFound = -1;
-        case Landing = 0;
-        case Home = 1;
-        case Auth = 2;
-        case Profile = 3;
+        case NOT_FOUND = -1;
+        case LANDING = 0;
+        case HOME = 1;
+        case AUTH = 2;
+        case PROFILE = 3;
     }
 
     function redirect(Pages $pageId) {
         $redirect = "Location: " .getRedirectUrl($pageId);
         header($redirect);
-        // switch ($pageId) {
-        //     case Pages::Landing:
-        //         break;
-        //     case Pages::Home:
-        //         header("Location: http://localhost/pwp/src/app/dashboard");
-        //         break;
-        //     case Pages::Auth:
-        //         header("Location: http://localhost/pwp/src/app/auth/login.php");
-        //         break;
-        //     case Pages::Profile:
-        //         header("Location: http://localhost/pwp/src/app/my");
-        //         break;
-        //     default:
-        //         header("Location: http://localhost/pwp/page_not_found.php");
-        //     }
         exit();
     }
 
     function getRedirectUrl(Pages $pageId) {
         switch ($pageId) {
-            case Pages::Landing:
+            case Pages::LANDING:
                 return "http://localhost/pwp/src/app/landing";
-            case Pages::Home:
+            case Pages::HOME:
                 return "http://localhost/pwp/src/app/dashboard";
-            case Pages::Auth:
+            case Pages::AUTH:
                 return "http://localhost/pwp/src/app/auth/login.php";
-            case Pages::Profile:
+            case Pages::PROFILE:
                 return "http://localhost/pwp/src/app/my";
             default:
                 return "http://localhost/pwp/page_not_found.php";
