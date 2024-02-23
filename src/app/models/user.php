@@ -1,5 +1,5 @@
 <?php
-if (!defined('URS_MODEL')) {
+if (!defined('USR_MODEL')) {
     define('USR_MODEL', true);
 
     class User {
@@ -54,11 +54,12 @@ if (!defined('URS_MODEL')) {
         function toString(): string {
             return '{ "id": '.$this->id.', '.
                 '"username": "'.$this->username.'", '.
-                '"since": "'.$this->since.'", '.
+                '"since": "'.explode(' ', $this->since)[0].'", '.
                 '"name": "'.$this->name.'", '.
                 '"email": "'.$this->email.'", '.
                 '"bio": "'.$this->bio.'", '.
-                '"xp": '.$this->xp.' '.
+                '"xp": '.$this->xp.', '.
+                '"lv": '.$this->getLevel().' '.
             '}';
         }
         
