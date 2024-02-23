@@ -1,0 +1,91 @@
+section:first-child {
+    margin-top: 10%;
+}
+
+h1 {
+    margin: 0%;
+}
+
+span {
+    color: var(--mid);
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+form {
+    div {
+        margin: 2% 0%;
+        display: flex;
+        flex-direction: column;
+    }
+    div span {
+        font-size: 0.9em;
+        color: var(--accent);
+    }
+    div input {
+        height: 2em;
+        background-color: var(--mid-t);
+        border: 0px;
+        border-radius: 5px;
+        padding-left: 1em;
+        font-family: 'Merriweather';
+        color: var(--false-black);
+    }
+    textarea {
+        border: 0px;
+        border-radius: 5px;
+        padding: 0.5em 1em;
+        background-color: var(--mid-t);
+        font-family: inherit;
+        font-size: 0.835em;
+        color: var(--false-black);
+    }
+    
+    .h1-input-container {
+        margin-bottom: 5%;
+
+        input {
+            border-bottom: 3px solid var(--accent);
+            background-color: var(--mid-t);
+            border-radius: 5px 5px 0px 0px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: var(--accent);
+        }
+    }
+}
+
+.spaced {
+    justify-content: space-between;
+}
+.based {
+    align-items: baseline;
+}
+
+.edit-btn {
+    background-color: var(--transparent);
+    color: var(--accent);
+    padding: 1.5% 2%;
+    border-radius: 7px;
+    margin: 0% 2%;
+    a {
+        color: var(--accent);
+    }
+}
+.edit-btn:hover {
+    color: var(--main);
+    a {
+        color: var(--main);
+    }
+}
+.delete-btn {
+    background-color: var(--rust-red);
+}
+.action-btn-container {
+    display:flex;
+    flex-direction: column;
+    margin-top: 10%;
+    button {
+        margin-top: 5%;
+    }
+}
