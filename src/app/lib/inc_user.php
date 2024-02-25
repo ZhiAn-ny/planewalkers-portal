@@ -3,6 +3,7 @@
 if (!defined('INC_USR')) {
     define('INC_USR', true);
 
+    require "inc_utils.php";
     require "inc_db_connection.php";
     require "inc_achievements.php";
 
@@ -35,7 +36,7 @@ if (!defined('INC_USR')) {
     
         //// READ
     
-        public function getUser(string $username, $mysqli = null): User {
+        public function getUser(string $username, $mysqli = null): ?User {
             if ($mysqli == null) {
                 $mysqli = connect();
             }
@@ -47,12 +48,13 @@ if (!defined('INC_USR')) {
                 $stmt->store_result();
                 $stmt->bind_result($user_id, $username, $since, $name, $email, $xp, $bio);
                 $stmt->fetch();
-                return new User($user_id, $username, $since, $name, $email, $xp, $bio);
+                if ($user_id)
+                    return new User($user_id, $username, $since, $name, $email, $xp, $bio);
             }
             return null;
         }
 
-        public function getUserFromID(int $user_id, $mysqli = null): User {
+        public function getUserFromID(int $user_id, $mysqli = null): ?User {
             if ($mysqli == null) {
                 $mysqli = connect();
             }
@@ -64,55 +66,64 @@ if (!defined('INC_USR')) {
                 $stmt->store_result();
                 $stmt->bind_result($user_id, $username, $since, $name, $email, $xp, $bio);
                 $stmt->fetch();
-                return new User($user_id, $username, $since, $name, $email, $xp, $bio);
+                if ($username) {
+                    return new User($user_id, $username, $since, $name, $email, $xp, $bio);
+                }
             }
             return null;
         }
     
         //// WRITE
     
-        public function updateUser(User $user): string {
-            $mysqli = connect();
-            $other = $this->getUser($user->getUsername(), $mysqli);
+        public function updateUser($user): string {
+            $other = $this->getUser($user->getUsername());
             if ($other != null && $other->getID() != $user->getID()) {
                 return "Username already taken.";
             }
-            //$result = $this->checkUpdateAchievements($user, $mysqli);
-
-            if ($this->update($user, $mysqli)) {
-                return '{ "success" : 1 }';
+            $result = $this->checkUpdateAchievements($user);
+            if ($this->update($user)) {
+                $_SESSION['user_id'] = $user->getID(); 
+                $_SESSION['username'] = $user->getUsername();
+                return $result;
             }
             return "Error occurred during query execution.";
         }
 
-        // private function checkUpdateAchievements(User $user, $mysqli = null) {
-        //     if ($mysqli == null) {
-        //         $mysqli = connect();
-        //     }
-        //     $achManager = new AchievementsManager()
+        private function checkUpdateAchievements(User $user) {
+            $achManager = new AchievementsManager();
+            $achs = $achManager->getUserAchievements($user);
+            $added = '{ "achievements" : [';
+            $hasOrig = array_column($achs, null, 'id')[AchievementsID::ORIGINS_ORACLE->value] ?? false;
+            $hasAlias = array_column($achs, null, 'id')[AchievementsID::ALIAS_ADEPT->value] ?? false;
+            if (!$hasAlias && $user->getName() != "") {
+                $new = $achManager->recordAchievement($user, AchievementsID::ALIAS_ADEPT);
+                $added = $added . $new;
+            }
+            if (!$hasOrig && $user->getBio() != "") {
+                $new = $achManager->recordAchievement($user, AchievementsID::ORIGINS_ORACLE);
+                if (!str_ends_with($added, '[')) {
+                    $added = $added . ', ';
+                }
+                $added = $added . $new;
+            }
+            $added = $added.'] }';
+            return $added;
+        }
 
-        //     $result = '{ "achievements": [';
-        //     $orig = $this->getUserFromID($user->getID(), $mysqli);
-
-        //     if ($orig->getName() == "" && $user->getName() != "") {
-                
-        //     }
-        //     $result = $result.'] }';
-        // }
-
+        /** Updates the user's username, name and bio */
         private function update(User $user, $mysqli = null) {
             if ($mysqli == null) {
                 $mysqli = connect();
             }
+            $username = $user->getUsername();
+            $name = $user->getName();
+            $bio = $user->getBio();
+            $id = $user->getID();
             $qry = "UPDATE members SET
-                      username = ?,
-                      name = ?,
-                      bio = ?,
-                      xp = ?
+                      username = ?, name = ?, bio = ?
                     WHERE id = ?";
             if ($stmt = $mysqli->prepare($qry)) { 
-                $stmt->bind_param('sssii', $user->getUsername(), $user->getName(),
-                                  $user->getBio(), $user->getXP(), $user->getID());
+                $stmt->bind_param('sssi', $username, $name, $bio, $id);
                 $stmt->execute();
                 return $stmt->affected_rows == 1;
             }
