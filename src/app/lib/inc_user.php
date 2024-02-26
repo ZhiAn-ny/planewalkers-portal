@@ -84,9 +84,9 @@ if (!defined('INC_USR')) {
             if ($this->update($user)) {
                 $_SESSION['user_id'] = $user->getID(); 
                 $_SESSION['username'] = $user->getUsername();
-                return $result;
             }
-            return "User not updated...".$result ;
+            return $result;
+            // return "User not updated...".$result ;
         }
 
         private function checkUpdateAchievements(User $user) {

@@ -14,7 +14,7 @@ function getUserDesc() {
     if (user.name !== "") {
         desc = user.name + " | ";
     }
-    desc += "LV. " + user.lv + "\n" 
+    desc += "LV. " + user.lv + " (" + user.xp + " XP)\n" 
         + "User since: " + user.since;
     return desc;
 }
@@ -37,6 +37,26 @@ function saveUser() {
     update();
 }
 
+function showNotification(notifications) {
+    let showedIndex = 0;
+    const notificationInterval = setInterval(() => {
+        if (showedIndex < notifications.length) {
+            const notif = notifications[showedIndex];
+            const notification = document.createElement('pw-notif');
+            notification.iconClass = notif.faClass;
+            notification.title = notif.name;
+            notification.text = notif.desc;
+            if (notif.xp) {
+                notification.text = notification.text + ' (' + notif.xp + ' XP)';
+            }
+            document.body.appendChild(notification);
+            showedIndex++;
+        } else {
+          clearInterval(notificationInterval);
+        }
+      }, 3000); // Create a new component every 2 seconds
+}
+
 function update() {
     const params = { action: 'update', user: JSON.stringify(user) };
     fetch('http://localhost/pwp/src/app/lib/user_functions.php', {
@@ -51,7 +71,12 @@ function update() {
         return response.json();
     }).then(response => {
         const newAchs = JSON.parse(response.message);
-
+        if (response.ok) {
+            showNotification([{name:"Save Successful", desc:"", faClass:"fa-solid fa-check"}])
+        }
+        if (newAchs.achievements.length > 0) {
+            showNotification(newAchs.achievements);
+        }
     }).catch(error => console.error(error));
 }
 
