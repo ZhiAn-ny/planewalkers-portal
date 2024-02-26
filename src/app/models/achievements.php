@@ -41,7 +41,7 @@ if (!defined('ACH_MODEL')) {
                 '"xp":'.$this->xp.', '.
                 '"faClass":"'.$this->faClass.'"';
             if ($this->dateEarned != null) {
-                $r = $r.', "dateEarned":"'.$this->dateEarned.'" ';
+                $r = $r.', "dateEarned":"'.$this->dateEarned->format('Y-m-d').'" ';
             }
             $r = $r.'}';
             return $r;

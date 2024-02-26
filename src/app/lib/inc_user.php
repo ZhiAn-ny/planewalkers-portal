@@ -86,25 +86,30 @@ if (!defined('INC_USR')) {
                 $_SESSION['username'] = $user->getUsername();
                 return $result;
             }
-            return "Error occurred during query execution.";
+            return "User not updated...".$result ;
         }
 
         private function checkUpdateAchievements(User $user) {
             $achManager = new AchievementsManager();
             $achs = $achManager->getUserAchievements($user);
+            
+            $hasNoAlias = empty(array_filter($achs, function($a) {
+                return $a->getID() == AchievementsID::ALIAS_ADEPT->value;
+            }));
+            $hasNoOrig = empty(array_filter($achs, function($a) {
+                return $a->getID() == AchievementsID::ORIGINS_ORACLE->value;
+            }));
             $added = '{ "achievements" : [';
-            $hasOrig = array_column($achs, null, 'id')[AchievementsID::ORIGINS_ORACLE->value] ?? false;
-            $hasAlias = array_column($achs, null, 'id')[AchievementsID::ALIAS_ADEPT->value] ?? false;
-            if (!$hasAlias && $user->getName() != "") {
+            if ($hasNoAlias && $user->getName() != "") {
                 $new = $achManager->recordAchievement($user, AchievementsID::ALIAS_ADEPT);
-                $added = $added . $new;
+                $added = $added . $new->toString();
             }
-            if (!$hasOrig && $user->getBio() != "") {
+            if ($hasNoOrig && $user->getBio() != "") {
                 $new = $achManager->recordAchievement($user, AchievementsID::ORIGINS_ORACLE);
                 if (!str_ends_with($added, '[')) {
                     $added = $added . ', ';
                 }
-                $added = $added . $new;
+                $added = $added . $new->toString();
             }
             $added = $added.'] }';
             return $added;

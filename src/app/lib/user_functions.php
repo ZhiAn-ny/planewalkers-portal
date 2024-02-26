@@ -27,10 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else if ($action == 'update') {
             $user = json_decode($decodedData['user']);
             $u = new User($user->id, $user->username, $user->since, $user->name, $user->email, $user->xp, $user->bio);
-            $response['u'] = $u;
-            $response['response'] = $userManager->updateUser($u);
-            $response['message'] = 'try update';
-
+            $response['message'] = $userManager->updateUser($u);
         } else {
             $response['message'] = 'else';
 

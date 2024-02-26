@@ -48,8 +48,10 @@ function update() {
             console.error(response);
             throw new Error("UpdateUser() failed");
         }
+        return response.json();
     }).then(response => {
-        console.log(response);
+        const newAchs = JSON.parse(response.message);
+
     }).catch(error => console.error(error));
 }
 

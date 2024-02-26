@@ -43,7 +43,7 @@ if (!defined('INC_ACH')) {
                 $stmt->close();
             }
             $mysqli->close();
-            return $ach->toString();
+            return $ach;
         }
 
         public function getUserAchievements(User $user) {
@@ -60,11 +60,10 @@ if (!defined('INC_ACH')) {
                 $stmt->bind_param('i', $uid);
                 $stmt->execute();
                 $stmt->bind_result($user_id, $ach_id, $name, $desc, $faclass, $xp, $date);
-                $affected = $stmt->affected_rows;
-                while ($affected > 0 && $row = $stmt->fetch()) {
-                    $a = new Achievement($row['achievement_id'], $row['name'], $row['description'],
-                                         $row['xp'], $row['fa_class'], $row['date_earned']);
-                    $achievements[] = $a;
+                while ($row = $stmt->fetch()) {
+                    $dateTime = DateTime::createFromFormat("Y-m-d", $date);
+                    $ach = new Achievement($ach_id, $name, $desc, $xp, $faclass, $dateTime);
+                    $achievements[] = $ach;
                 }
                 $stmt->close();
             }
