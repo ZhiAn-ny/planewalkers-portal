@@ -54,7 +54,7 @@ function showNotification(notifications) {
         } else {
           clearInterval(notificationInterval);
         }
-      }, 3000); // Create a new component every 2 seconds
+      }, 3000); // Create a new component every 3 seconds
 }
 
 function update() {
@@ -70,12 +70,11 @@ function update() {
         }
         return response.json();
     }).then(response => {
-        const newAchs = JSON.parse(response.message);
+        const notifs = new Array({name:"Save Successful", desc:"", faClass:"fa-solid fa-check"});
+        const message = JSON.parse(response.message);
+        notifs.push(...message.achievements);
         if (response.ok) {
-            showNotification([{name:"Save Successful", desc:"", faClass:"fa-solid fa-check"}])
-        }
-        if (newAchs.achievements.length > 0) {
-            showNotification(newAchs.achievements);
+            showNotification(notifs);
         }
     }).catch(error => console.error(error));
 }
