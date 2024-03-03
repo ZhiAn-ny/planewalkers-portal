@@ -22,8 +22,11 @@
                 </a>
             </button>
         </section>
-        <section>
+        <section class="fx-col">
             <span id="userDesc"></span>
+            <span id="userAchievements"></span>
+        <section>
+        </section>
             <p id="bio" class="content-bio"></p>
         </section>
     </main>

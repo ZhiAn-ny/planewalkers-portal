@@ -17,10 +17,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($action == 'get') {
             $username = $decodedData['username'];
+            $readAchievements = $decodedData['a'] ?? '1';
             if ($username == null || $username == '') {
                 $username = $_SESSION['username'];
             }
             $res = $userManager->getUser($username);
+            if ($readAchievements == '1') {
+                $achManager = new AchievementsManager();
+                $achs = $achManager->getUserAchievements($res);
+                $res->addAchievements(...$achs);
+            }
             $response['message'] = $res->toString();
             $response['usr'] = $username;
 

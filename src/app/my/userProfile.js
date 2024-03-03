@@ -3,10 +3,12 @@ let user;
 function displayUserData() {
     const username = document.getElementById("username");
     const desc = document.getElementById("userDesc");
+    const achs = document.getElementById("userAchievements");
     const bio = document.getElementById("bio");
     username.innerText = user.username;
     bio.innerText = user.bio;
     desc.innerText = getUserDesc(user);
+    achs.innerHTML = getAchsHtml();
 }
 
 function getUserDesc() {
@@ -17,6 +19,17 @@ function getUserDesc() {
     desc += "LV. " + user.lv + " (" + user.xp + " XP)\n" 
         + "User since: " + user.since;
     return desc;
+}
+
+function getAchsHtml() {
+    let innerHTML = '';
+    if (user.achievements) {
+        for (var i = 0; i < user.achievements.length; i++) {
+            const html = '<i class="' + user.achievements[i].faClass + '"></i>'
+            innerHTML += html + '\n';
+        }
+    }
+    return innerHTML;
 }
 
 function initUserForm() {

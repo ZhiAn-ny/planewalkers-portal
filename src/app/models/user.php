@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('USR_MODEL')) {
     define('USR_MODEL', true);
 
@@ -10,6 +11,7 @@ if (!defined('USR_MODEL')) {
         private string $bio = '';
         private int $xp = 0;
         private string $email = '';
+        private $achievements = [];
         
         function __construct($id, $username, $since, $name, $email, $xp, $bio) {
             $this->id = $id;
@@ -51,16 +53,34 @@ if (!defined('USR_MODEL')) {
             else return 20;
         }
 
+        /** Adds the specified achievements into the list of achievements of
+         *  the current user. */
+        function addAchievements(Achievement ...$achievements) {
+            foreach ($achievements as $achievement) {
+                array_push($this->achievements, $achievement);
+            }
+        }
+
         function toString(): string {
-            return '{ "id": '.$this->id.', '.
+            $userStr =  '{ "id": '.$this->id.', '.
                 '"username": "'.$this->username.'", '.
                 '"since": "'.explode(' ', $this->since)[0].'", '.
                 '"name": "'.$this->name.'", '.
                 '"email": "'.$this->email.'", '.
                 '"bio": "'.$this->bio.'", '.
                 '"xp": '.$this->xp.', '.
-                '"lv": '.$this->getLevel().' '.
-            '}';
+                '"lv": '.$this->getLevel().', '.
+                '"achievements": [';
+            for ($i = 0; $i < count($this->achievements) ; $i++) {
+                $ach = $this->achievements[$i];
+                $str = $ach->toString();
+                $userStr = $userStr.$str;
+                if ($i != count($this->achievements)-1) {
+                    $userStr = $userStr .', ';
+                }
+            }
+            $userStr = $userStr.'] }';
+            return $userStr;
         }
         
     }
