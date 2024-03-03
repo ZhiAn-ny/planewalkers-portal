@@ -14,6 +14,10 @@
 <body>
     <pw-nav></pw-nav>
     <main>
+        <button class="fx-row btn-transparent btn-sm" onclick="toProfile()">
+            <i class="fa-solid fa-angles-left"></i>
+            <p>Back to profile</p>
+        </button>
         <form action="" method="post" autocomplete="off" class="fx-col">
             <section>
                 <div class="h1-input-container">
@@ -35,10 +39,10 @@
                 <span id="since"></span>
             </section>
         </form>
-        <section  class="action-btn-container">
+        <div  class="action-btn-container">
             <button type="submit" name="submit" onclick="saveUser()">Save Changes</button>
-            <button class="delete-btn">Delete Account</button>
-        </section>
+            <button class="delete-btn">Exit Edit</button>
+        </div>
     </main>
 </body>
 </html>

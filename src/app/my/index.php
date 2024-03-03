@@ -14,7 +14,7 @@
 <body>
     <pw-nav></pw-nav>
     <main>
-        <section class="fx-row based">
+        <section class="fx-row based top10">
             <h1 id="username"></h1>
             <button class="edit-btn">
                 <a href="./edit.php">

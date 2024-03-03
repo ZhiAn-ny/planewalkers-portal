@@ -79,6 +79,23 @@ function update() {
     }).catch(error => console.error(error));
 }
 
+function toProfile() {
+    const params = { page: 3 };
+    fetch('http://localhost/pwp/src/app/lib/routing_functions.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: JSON.stringify(params)
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error("Redirect failed");
+        }
+        console.log('Redirect ok');
+        return response.json();
+    }).then(response => {
+        window.location.href = response.url;
+    }).catch(error => console.error(error));
+}
+
 const params = { action: 'get', username: '' };
 fetch('http://localhost/pwp/src/app/lib/user_functions.php', {
     method: 'POST',
