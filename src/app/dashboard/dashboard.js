@@ -1,5 +1,4 @@
 
-
 function setGreetings(user) {
     const greetingsList = [
         "Hi", "Hello", "Greetings", "May the light shine upon you,",
@@ -9,6 +8,23 @@ function setGreetings(user) {
     const name = user.name ? user.name : user.username;
     const greetUser = document.getElementById("greetings");
     greetUser.innerText = greet + " " + name;
+}
+
+function addFriend() {
+    const params = { page: 4 };
+    fetch('http://localhost/pwp/src/app/lib/routing_functions.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: JSON.stringify(params)
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error("Redirect failed");
+        }
+        console.log('Redirect ok');
+        return response.json();
+    }).then(response => {
+        window.location.href = response.url;
+    }).catch(error => console.error(error));
 }
 
 const params = { action: 'get', username: '' };

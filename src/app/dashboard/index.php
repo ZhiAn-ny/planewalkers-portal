@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link href="./home.css" rel="stylesheet" type="text/css"/> -->
+    <link href="dashboard.css" rel="stylesheet" type="text/css"/>
     <link href="../../assets/css/global.css" rel="stylesheet" type="text/css"/>
     <script src="../../assets/js/components/componentsModule.js" type="module"></script>
     <script src="dashboard.js" type="text/javascript"></script>
@@ -18,9 +18,9 @@
         <section>
             <h2>My friends</h2>
             <ul class="fx-row">
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
+                <li>A</li>
+                <li>B</li>
+                <li class="new" onclick="addFriend()">+</li>
             </ul>
         </section>
     </main>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="./landing.css" rel="stylesheet" type="text/css"/>
-    <link href="../../res/assets/css/global.css" rel="stylesheet" type="text/css"/>
+    <link href="./src/assets/css/global.css" rel="stylesheet" type="text/css"/>
     <script src="https://kit.fontawesome.com/93710f8f6f.js" crossorigin="anonymous"></script>
     <!--<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" type="text/javascript"></script> -->
     <title>Planeswalker's Portal</title>

@@ -1,0 +1,25 @@
+section {
+    margin: 5% 0%;
+}
+
+.search-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    background-color: var(--mid-t);
+    justify-content: space-between;
+    border-radius: 5px;
+    align-content: stretch;
+    input {
+        width: 100%;
+        background-color: var(--transparent)
+    }
+    input:focus-visible {
+        outline: none;
+    }
+    button {
+        margin: 0%;
+        padding: 2% 5%;
+    }
+}
+

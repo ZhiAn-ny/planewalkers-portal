@@ -1,0 +1,23 @@
+ul {
+    list-style: none;
+    padding-left: 0%;
+    margin: 5% 0%;
+    gap: 2.5%;
+    li {
+       /* margin: 0% 2%;*/
+        background: var(--mid);
+        width: 24%;
+        padding: 8.5% 0%;
+        text-align: center;
+        border-radius: 50px;
+    }
+    .new {
+        background: var(--accent);
+        color: var(--main);
+        background-blend-mode: multiply;
+    }    
+    .new:hover { 
+        opacity: 1;
+        background-image: linear-gradient(to bottom, var(--accent-t), var(--accent-t));
+    }
+}

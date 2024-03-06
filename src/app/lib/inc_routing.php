@@ -11,6 +11,7 @@ if (!defined('INC_ROUTING')) {
         case HOME = 1;
         case AUTH = 2;
         case PROFILE = 3;
+        case SEARCH_USER = 4;
     }
 
     function redirect(Pages $pageId) {
@@ -29,6 +30,8 @@ if (!defined('INC_ROUTING')) {
                 return "http://localhost/pwp/src/app/auth/login.php";
             case Pages::PROFILE:
                 return "http://localhost/pwp/src/app/my";
+            case Pages::SEARCH_USER:
+                return "http://localhost/pwp/src/app/users/search.php";
             default:
                 return "http://localhost/pwp/page_not_found.php";
         }

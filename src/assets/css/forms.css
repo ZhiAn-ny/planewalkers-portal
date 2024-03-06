@@ -1,0 +1,23 @@
+form {
+    div {
+        margin: 2% 0%;
+        display: flex;
+        flex-direction: column;
+    }
+    div span {
+        font-size: 0.9em;
+        color: var(--accent);
+    }
+    input, div input {
+        height: 2em;
+        background-color: var(--mid-t);
+        border: 0px;
+        border-radius: 5px;
+        padding-left: 1em;
+        font-family: 'Merriweather';
+        color: var(--false-black);
+    }
+    button {
+        margin-top: 10%;
+    }
+}

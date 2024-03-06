@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Merriweather&display=swap');
 @import url('notifications.css');
 @import url('buttons.css');
+@import url('forms.css');
 
 :root {
     --parchment: #FFF4E3;
