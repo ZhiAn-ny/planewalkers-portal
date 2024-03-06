@@ -15,22 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $action = $decodedData['action'] ?? '';
         $userManager = new UserManager();
 
-        if ($action == 'get') {
-            $username = $decodedData['username'];
-            $readAchievements = $decodedData['a'] ?? '1';
-            if ($username == null || $username == '') {
-                $username = $_SESSION['username'];
-            }
-            $res = $userManager->getUser($username);
-            if ($readAchievements == '1') {
-                $achManager = new AchievementsManager();
-                $achs = $achManager->getUserAchievements($res);
-                $res->addAchievements(...$achs);
-            }
-            $response['message'] = $res->toString();
-            $response['usr'] = $username;
-
-        } else if ($action == 'update') {
+        if ($action == 'update') {
             $user = json_decode($decodedData['user']);
             $u = new User($user->id, $user->username, $user->since, $user->name, $user->email, $user->xp, $user->bio);
             $response['message'] = $userManager->updateUser($u);
@@ -43,6 +28,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } catch (\Exception $e) {
         $response['status'] = 500;
         $response['ok'] = false;
+        $response['vdump'] = print_r($e);
+        $response['message'] = $e.getMessage();        
+    }
+    http_response_code($response['status']);
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit();
+} 
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $username = $_GET['username'] ?? '';
+    $readAchievements = $_GET['a'] ?? '1';
+    $response['status'] = 500;
+    $response['ok'] = false;
+    try {
+        $userManager = new UserManager();
+        if ($username == null || $username == '') {
+            $username = $_SESSION['username'];
+        }
+        $res = $userManager->getUser($username);
+        if ($readAchievements == '1') {
+            $achManager = new AchievementsManager();
+            $achs = $achManager->getUserAchievements($res);
+            $res->addAchievements(...$achs);
+        }
+        $response['message'] = $res->toString();
+        $response['status'] = 200;
+        $response['ok'] = true;
+    } catch (\Exception $e) {
         $response['vdump'] = print_r($e);
         $response['message'] = $e.getMessage();        
     }

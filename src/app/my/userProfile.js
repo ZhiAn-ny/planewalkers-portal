@@ -109,11 +109,9 @@ function toProfile() {
     }).catch(error => console.error(error));
 }
 
-const params = { action: 'get', username: '' };
-fetch('http://localhost/pwp/src/app/lib/user_functions.php', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    body: JSON.stringify(params)
+ fetch('http://localhost/pwp/src/app/lib/user_functions.php?username=', {
+    method: 'GET',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 }).then(response => {
     if (!response.ok) {
         throw new Error("GetCurrentUser() failed");
