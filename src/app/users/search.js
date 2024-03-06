@@ -17,4 +17,18 @@ function toDashboard() {
 
 function searchUser(username) {
     console.log('searching: ', username);
+    let url = 'http://localhost/pwp/src/app/lib/user_functions.php';
+    url += '?ssu=1&username=' + username;
+    fetch(url, {
+        method: 'GET',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error("GetUsernameLike() failed");
+        }
+        return response.json();
+    }).then(response => {
+        users = JSON.parse(response.message);
+        console.log('users: ', users);
+    }).catch(error => console.error(error));
 }

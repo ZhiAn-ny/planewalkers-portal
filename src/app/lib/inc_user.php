@@ -73,6 +73,24 @@ if (!defined('INC_USR')) {
             return null;
         }
     
+        public function getUsernameLike(string $baseUsername, int $maxCount): array {
+            $mysqli = connect();
+            $users = array();
+            $baseUsername = $baseUsername.'%';
+            $qry = "SELECT id, username, name FROM members 
+                    WHERE username like ? LIMIT ?";
+            if ($stmt = $mysqli->prepare($qry)) { 
+                $stmt->bind_param('si', $baseUsername, $maxCount);
+                $stmt->execute();
+                $stmt->bind_result($user_id, $username, $name);
+                while ($row = $stmt->fetch()) {
+                    $users[] = $username;
+                }
+                $stmt->close();
+            }
+            return $users;
+        }
+
         //// WRITE
     
         public function updateUser($user): string {

@@ -73,7 +73,7 @@ function showNotification(notifications) {
 function update() {
     const params = { action: 'update', user: JSON.stringify(user) };
     fetch('http://localhost/pwp/src/app/lib/user_functions.php', {
-        method: 'POST',
+        method: 'PATCH',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         body: JSON.stringify(params)
     }).then(response => {
@@ -109,7 +109,7 @@ function toProfile() {
     }).catch(error => console.error(error));
 }
 
- fetch('http://localhost/pwp/src/app/lib/user_functions.php?username=', {
+fetch('http://localhost/pwp/src/app/lib/user_functions.php?username=', {
     method: 'GET',
     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 }).then(response => {
