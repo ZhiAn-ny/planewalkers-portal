@@ -74,6 +74,10 @@ h1 {
     flex-direction: row;
 }
 
+.based {
+    align-items: baseline;
+}
+
 .no-bg {
     background: none;
 }

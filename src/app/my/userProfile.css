@@ -58,9 +58,6 @@ form {
 .spaced {
     justify-content: space-between;
 }
-.based {
-    align-items: baseline;
-}
 
 .edit-btn {
     background-color: var(--transparent);

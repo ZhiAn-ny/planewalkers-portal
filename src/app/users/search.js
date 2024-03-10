@@ -1,5 +1,15 @@
+let user;
+
 function toDashboard() {
-    const params = { page: 1 };
+    redirect(1);
+}
+
+function toSearch() {
+    redirect(4);
+}
+
+function redirect(pageId) {
+    const params = { page: pageId };
     fetch('http://localhost/pwp/src/app/lib/routing_functions.php', {
         method: 'POST',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -30,5 +40,73 @@ function searchUser(username) {
     }).then(response => {
         users = JSON.parse(response.message);
         console.log('users: ', users);
+        showResults(users);
     }).catch(error => console.error(error));
+}
+
+function createResultItem(user) {
+    const div = document.createElement('div');
+    div.className = 'search-item';
+    div.innerHTML = '<p>'+user+'</p>';
+    div.addEventListener('click', () => getUserPage(user))
+    return div;
+}
+
+function showResults(users) {
+    const container = document.getElementById('results-container');
+    while (container.children.length > 0) {
+        container.removeChild(container.firstChild);
+    }
+    if (users.length == 0) {
+        let notFound = document.createElement('div');
+        notFound.innerText = 'No user found with this username';
+        container.appendChild(notFound);
+        return;
+    }
+    for (let i = 0; i < users.length; i++) {
+        let searchItem = createResultItem(users[i]);
+        container.appendChild(searchItem);
+    }
+}
+
+function getUserPage(username) {
+    window.location.href = 'http://localhost/pwp/src/app/users?s=' + username;
+}
+
+async function displayUserData(toDisplay) {
+    user = await fetch('http://localhost/pwp/src/app/lib/user_functions.php?username=' + toDisplay, {
+        method: 'GET',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).then(response => response.json())
+    .then(response => JSON.parse(response.message));
+
+    const username = document.getElementById("username");
+    const desc = document.getElementById("userDesc");
+    const achs = document.getElementById("userAchievements");
+    const bio = document.getElementById("bio");
+    username.innerText = user.username;
+    bio.innerText = user.bio;
+    desc.innerText = getUserDesc(user);
+    achs.innerHTML = getAchsHtml();
+}
+
+function getUserDesc() {
+    let desc = "";
+    if (user.name !== "") {
+        desc = user.name + " | ";
+    }
+    desc += "LV. " + user.lv + " (" + user.xp + " XP)\n" 
+        + "User since: " + user.since;
+    return desc;
+}
+
+function getAchsHtml() {
+    let innerHTML = '';
+    if (user.achievements) {
+        for (var i = 0; i < user.achievements.length; i++) {
+            const html = '<i class="' + user.achievements[i].faClass + '"></i>'
+            innerHTML += html + '\n';
+        }
+    }
+    return innerHTML;
 }

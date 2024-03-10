@@ -2,6 +2,21 @@ section {
     margin: 5% 0%;
 }
 
+h1 {
+    margin: 0%;
+}
+
+h2 {
+    font-size:0.9em;
+    font-weight: bold;
+}
+
+span {
+    color: var(--mid);
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
 .search-container {
     width: 100%;
     display: flex;
@@ -23,3 +38,17 @@ section {
     }
 }
 
+.search-item {
+    background: var(--mid-t);
+    border-radius: 5px;
+    padding: 2% 5%;
+    cursor: pointer;
+    margin-top: 2%;
+    p {
+        margin: 0%;
+    }
+}
+
+.top10 {
+    margin-top: 10%;
+}

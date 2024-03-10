@@ -1,3 +1,8 @@
+<?php
+    if ($_GET['s'] == '') {
+        header('Location: search.php');
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,27 +18,22 @@
 </head>
 <body>
     <pw-nav></pw-nav>
-    <button class="fx-row btn-transparent btn-sm" onclick="toDashboard()">
+    <button class="fx-row btn-transparent btn-sm" onclick="toSearch()">
         <i class="fa-solid fa-angles-left"></i>
-        <p>Back to dashboard</p>
+        <p>Back to search</p>
     </button>
     <main>
-        <section>
-            <form class="fx-row">
-                <div class="search-container">
-                    <input id="search-input" type="text" 
-                    placeholder="Search user..."
-                    oninput="searchUser(this.value)">
-                    <button class="btn-transparent" onclick="searchUser()">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </button>
-                </div>
-            </form>
+        <section class="fx-row based top10">
+            <h1 id="username"></h1>
         </section>
-        <section id="search-result">
-            <h2>Results:</h2>
-            <div id="results-container"></div>
+        <section class="fx-col">
+            <span id="userDesc"></span>
+            <span id="userAchievements"></span>
+        </section>
+        <section>
+            <p id="bio" class="content-bio"></p>
         </section>
     </main>
 </body>
+<script> displayUserData(<?php echo '"'.$_GET['s'].'"'; ?>) </script>
 </html>

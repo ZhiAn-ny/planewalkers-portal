@@ -41,7 +41,7 @@
         </form>
         <div  class="action-btn-container">
             <button type="submit" name="submit" onclick="saveUser()">Save Changes</button>
-            <button class="delete-btn">Exit Edit</button>
+            <!-- <button class="delete-btn">Exit Edit</button> -->
         </div>
     </main>
 </body>
