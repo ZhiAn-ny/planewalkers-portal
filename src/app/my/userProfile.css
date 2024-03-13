@@ -55,10 +55,6 @@ form {
     margin-top: 10%;
 }
 
-.spaced {
-    justify-content: space-between;
-}
-
 .edit-btn {
     background-color: var(--transparent);
     color: var(--accent);

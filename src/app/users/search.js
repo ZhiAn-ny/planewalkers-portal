@@ -80,6 +80,17 @@ async function displayUserData(toDisplay) {
     }).then(response => response.json())
     .then(response => JSON.parse(response.message));
 
+    let friendshipStatus = await fetch('http://localhost/pwp/src/app/lib/friends_functions.php?t=' + toDisplay, {
+        method: 'GET',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).then(response => response.json())
+    .then(response => response.message);
+
+    handleFriendRequestBtn(friendshipStatus);
+    displayData();
+}
+
+function displayData() {
     const username = document.getElementById("username");
     const desc = document.getElementById("userDesc");
     const achs = document.getElementById("userAchievements");
@@ -88,6 +99,23 @@ async function displayUserData(toDisplay) {
     bio.innerText = user.bio;
     desc.innerText = getUserDesc(user);
     achs.innerHTML = getAchsHtml();
+}
+
+function handleFriendRequestBtn(friendshipStatus) {
+    const btn = document.getElementById("btn-friend");
+    let iconClass = [];
+    switch (friendshipStatus) {
+        case "accepted":
+            iconClass = ["fa-solid", "fa-user-check"]
+            break;
+        case "pending":
+            iconClass = ["fa-solid", "fa-user-clock"]
+            break;
+        default:
+            iconClass = ["fa-solid", "fa-user-plus"]
+    }
+    const icon = btn.getElementsByTagName("i")[0];
+    iconClass.forEach(className => icon.classList.add(className));
 }
 
 function getUserDesc() {

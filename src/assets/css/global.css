@@ -78,6 +78,10 @@ h1 {
     align-items: baseline;
 }
 
+.spaced {
+    justify-content: space-between;
+}
+
 .no-bg {
     background: none;
 }

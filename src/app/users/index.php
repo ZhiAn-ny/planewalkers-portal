@@ -23,8 +23,11 @@
         <p>Back to search</p>
     </button>
     <main>
-        <section class="fx-row based top10">
+        <section class="fx-row based spaced top10">
             <h1 id="username"></h1>
+            <button class="btn-sm btn-outline btn-transparent">
+                <i id="btn-friend"></i>
+            </button>
         </section>
         <section class="fx-col">
             <span id="userDesc"></span>
