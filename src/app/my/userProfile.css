@@ -1,5 +1,5 @@
 h1 {
-    margin: 0%;
+    margin: 0;
 }
 
 span {
@@ -10,7 +10,7 @@ span {
 
 form {
     div {
-        margin: 2% 0%;
+        margin: 2% 0;
         display: flex;
         flex-direction: column;
     }
@@ -21,14 +21,15 @@ form {
     div input {
         height: 2em;
         background-color: var(--mid-t);
-        border: 0px;
+        border: 0;
         border-radius: 5px;
         padding-left: 1em;
-        font-family: 'Merriweather';
+        font-family: 'Merriweather', serif
+    ;
         color: var(--false-black);
     }
     textarea {
-        border: 0px;
+        border: 0;
         border-radius: 5px;
         padding: 0.5em 1em;
         background-color: var(--mid-t);
@@ -43,7 +44,7 @@ form {
         input {
             border-bottom: 3px solid var(--accent);
             background-color: var(--mid-t);
-            border-radius: 5px 5px 0px 0px;
+            border-radius: 5px 5px 0 0;
             font-size: 1.1em;
             font-weight: bold;
             color: var(--accent);
@@ -60,7 +61,7 @@ form {
     color: var(--accent);
     padding: 1.5% 2%;
     border-radius: 7px;
-    margin: 0% 2%;
+    margin: 0 2%;
     a {
         color: var(--accent);
     }

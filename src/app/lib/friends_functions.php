@@ -2,7 +2,7 @@
 require("inc_friends.php");
 sec_session_start();
 
-$params;
+$params = [];
 $response = array();
 $response['status'] = 500;
 $response['ok'] = false;

@@ -4,7 +4,7 @@ button {
     border-radius: 10px;
     background-color: var(--accent);
     color: var(--main);
-    font-family: 'Merriweather';
+    font-family: 'Merriweather', serif;
     background-blend-mode: multiply;
     transition: 1s;
     opacity: 1;
@@ -27,11 +27,11 @@ button:hover {
 }
 
 .btn-sm {
-    margin: 0%;
+    margin: 0;
     font-size: 0.8em;
     font-weight: bold;
     p {
-        margin: 0%;
+        margin: 0;
     }
     i {
         margin-top: 1%;

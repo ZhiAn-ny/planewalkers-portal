@@ -1,9 +1,9 @@
 section {
-    margin: 5% 0%;
+    margin: 5% 0;
 }
 
 h1 {
-    margin: 0%;
+    margin: 0;
 }
 
 h2 {
@@ -33,7 +33,7 @@ span {
         outline: none;
     }
     button {
-        margin: 0%;
+        margin: 0;
         padding: 2% 5%;
     }
 }
@@ -45,7 +45,7 @@ span {
     cursor: pointer;
     margin-top: 2%;
     p {
-        margin: 0%;
+        margin: 0;
     }
 }
 

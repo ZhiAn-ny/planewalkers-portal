@@ -57,7 +57,7 @@ function showResults(users) {
     while (container.children.length > 0) {
         container.removeChild(container.firstChild);
     }
-    if (users.length == 0) {
+    if (users.length === 0) {
         let notFound = document.createElement('div');
         notFound.innerText = 'No user found with this username';
         container.appendChild(notFound);
@@ -103,7 +103,7 @@ function displayData() {
 
 function handleFriendRequestBtn(friendshipStatus) {
     const btn = document.getElementById("btn-friend");
-    let iconClass = [];
+    let iconClass;
     switch (friendshipStatus) {
         case "accepted":
             iconClass = ["fa-solid", "fa-user-check"]
