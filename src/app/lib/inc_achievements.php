@@ -4,7 +4,7 @@ if (!defined('INC_ACH')) {
 
     require "inc_db_connection.php";
     require "../models/user.php";
-    require "../models/achievements.php";
+    require "../models/achievement.php";
 
     class AchievementsManager {
 
