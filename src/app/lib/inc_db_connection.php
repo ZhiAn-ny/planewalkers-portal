@@ -6,6 +6,9 @@ if (!defined('INC_CONNECTION')) {
     define("USER", "sec_user"); // E' l'utente con cui ti collegherai al DB.
     define("PASSWORD", "GsCQK71cbfmfzKcPXG3"); // Password di accesso al DB.
     define("DATABASE", "tecweb_pwpel"); // Nome del database.
+    
+    define("DEL_USER", "deletion_user");
+    define("DEL_PASSWORD", "BuCxErPP9ajg");
 
     function sec_session_start() {
         $session_name = 'sec_session_id'; // Imposta un nome di sessione
@@ -19,18 +22,40 @@ if (!defined('INC_CONNECTION')) {
         session_regenerate_id(); // Rigenera la sessione e cancella quella creata in precedenza.
     }
 
-    function connect() {
+    function connect($permitDeleting = false) {
         if (session_status() != PHP_SESSION_ACTIVE) {
             sec_session_start();
         }
-        $mysqli = new mysqli(HOST, USER, PASSWORD, DATABASE);
-        if ($mysqli->connect_error != 0) {
-            $err = $mysqli->connect_error;
-            $err_date = date("F j, Y, h:i a");
-            $msg = "{$err} | {$err_date} \r\n";
-            file_put_contents("db-log.txt", $msg, FILE_APPEND);
-            return false;
+        if ($permitDeleting) {
+            return ConnectionFactory::getDeletionConnection();
+        } else {
+            return ConnectionFactory::getSecureConnection();
         }
-        return $mysqli;
+    }
+
+    class ConnectionFactory {
+        public static function getSecureConnection() {
+            $mysqli = new mysqli(HOST, USER, PASSWORD, DATABASE);
+            if ($mysqli->connect_error != 0) {
+                $err = $mysqli->connect_error;
+                $err_date = date("F j, Y, h:i a");
+                $msg = "{$err} | {$err_date} \r\n";
+                file_put_contents("db-log.txt", $msg, FILE_APPEND);
+                return false;
+            }
+            return $mysqli;
+        }
+
+        public static function getDeletionConnection() {
+            $mysqli = new mysqli(HOST, DEL_USER, DEL_PASSWORD, DATABASE);
+            if ($mysqli->connect_error != 0) {
+                $err = $mysqli->connect_error;
+                $err_date = date("F j, Y, h:i a");
+                $msg = "{$err} | {$err_date} \r\n";
+                file_put_contents("db-log.txt", $msg, FILE_APPEND);
+                return false;
+            }
+            return $mysqli;
+        }
     }
 }

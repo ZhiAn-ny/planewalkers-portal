@@ -1,3 +1,6 @@
+/**
+ * Object containing the searched user.
+ */
 let user;
 
 function toDashboard() {
@@ -79,15 +82,37 @@ async function displayUserData(toDisplay) {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     }).then(response => response.json())
     .then(response => JSON.parse(response.message));
+    let friendshipStatus = await handleFriendship(user.id);
+    displayData();
+}
 
-    let friendshipStatus = await fetch('http://localhost/pwp/src/app/lib/friends_functions.php?t=' + toDisplay, {
+function handleFriendship(other) {
+    return fetch('http://localhost/pwp/src/app/lib/friends_functions.php?t=' + other, {
         method: 'GET',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     }).then(response => response.json())
-    .then(response => response.message);
+    .then(response => {
+        updateFriendRequestBtn(response.message);
+        return response.message;
+    });
+}
 
-    handleFriendRequestBtn(friendshipStatus);
-    displayData();
+function sendFriendRequest() {
+    const params = { t: user.id };
+    return fetch('http://localhost/pwp/src/app/lib/friends_functions.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: JSON.stringify(params)
+    });
+}
+
+function revokeFriendRequest() {
+    const params = { t: user.id };
+    return fetch('http://localhost/pwp/src/app/lib/friends_functions.php', {
+        method: 'DELETE',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: JSON.stringify(params)
+    });
 }
 
 function displayData() {
@@ -101,8 +126,24 @@ function displayData() {
     achs.innerHTML = getAchsHtml();
 }
 
-function handleFriendRequestBtn(friendshipStatus) {
+function updateFriendRequestBtn(friendshipStatus) {
+    console.log("updateFriendRequestBtn", friendshipStatus);
     const btn = document.getElementById("btn-friend");
+    updateFriendRequestIcon(btn, friendshipStatus);
+
+    if (friendshipStatus == "pending" || friendshipStatus == "accepted") {
+        btn.addEventListener("click", () => {
+            revokeFriendRequest().then(() => handleFriendship(user.id));
+        })
+    } else {
+        btn.addEventListener("click", () => {
+            sendFriendRequest().then(() => handleFriendship(user.id));
+        });
+    }
+}
+
+function updateFriendRequestIcon(btn, friendshipStatus) {
+    const icon = btn.querySelector("i");
     let iconClass;
     switch (friendshipStatus) {
         case "accepted":
@@ -114,7 +155,9 @@ function handleFriendRequestBtn(friendshipStatus) {
         default:
             iconClass = ["fa-solid", "fa-user-plus"]
     }
-    const icon = btn.getElementsByTagName("i")[0];
+    while (icon.classList.length > 0) {
+        icon.classList.remove(icon.classList.item(0));
+    }
     iconClass.forEach(className => icon.classList.add(className));
 }
 

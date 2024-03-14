@@ -14,12 +14,12 @@ if (!defined('INC_FRN')) {
 
     class FriendshipManager {
 
-        public function checkFriendshipStatus($user, $other): FriendshipStatus {
+        public function checkFriendshipStatus(int $user1, int $user2): FriendshipStatus {
             $mysqli = connect();
             $qry = "SELECT friendship_status FROM friendship
                 WHERE (user1_id = ? OR user2_id = ?) AND (user1_id = ? OR user2_id = ?)";
             $stmt = $mysqli->prepare($qry);
-            $stmt->bind_param("ssss", $user, $user, $other, $other);
+            $stmt->bind_param("iiii", $user1, $user1, $user2, $user2);
             $stmt->execute();
             $stmt->store_result();
             $stmt->bind_result($status);
@@ -27,6 +27,28 @@ if (!defined('INC_FRN')) {
             $stmt->close();
             $mysqli->close();
             return FriendshipStatus::tryFrom($status);
+        }
+
+        public function sendFriendRequest(int $sender, int $target) {
+            $mysqli = connect();
+            $qry = "INSERT INTO friendship (user1_id, user2_id, friendship_status)
+                    VALUES (?, ?, 'pending')";
+            $stmt = $mysqli->prepare($qry);
+            $stmt->bind_param('ii', $sender, $target);
+            $stmt->execute();
+            $stmt->close();
+            $mysqli->close();
+        }
+
+        public function deleteFriendship(int $user1, int $user2) {
+            $mysqli = connect(true);
+            $qry = "DELETE FROM friendship
+                    WHERE (user1_id = ? AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)";
+            $stmt = $mysqli->prepare($qry);
+            $stmt->bind_param('iiii', $user1, $user2, $user2, $user1);
+            $stmt->execute();
+            $stmt->close();
+            $mysqli->close();
         }
 
     }

@@ -25,8 +25,8 @@
     <main>
         <section class="fx-row based spaced top10">
             <h1 id="username"></h1>
-            <button class="btn-sm btn-outline btn-transparent">
-                <i id="btn-friend"></i>
+            <button id="btn-friend" class="btn-sm btn-outline btn-transparent">
+                <i></i>
             </button>
         </section>
         <section class="fx-col">

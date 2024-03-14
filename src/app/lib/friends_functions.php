@@ -22,13 +22,20 @@ try {
     
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':
-            $username = $_SESSION['username'];
-            $target = $_GET['t'] ?? '';
-            $response['message'] = $fm->checkFriendshipStatus($username, $target);
+            $user = $_SESSION['user_id'];
+            $target = (int)$params['t'] ?? 0;
+            $response['message'] = $fm->checkFriendshipStatus($user, $target);
             break;
         case 'POST':
+            $user = $_SESSION['user_id'];
+            $target = (int)$params['t'] ?? 0;
+            $fm->sendFriendRequest($user, $target);
             break;
-        case 'PATCH':
+        case 'DELETE':
+            $user = $_SESSION['user_id'];
+            $target = (int)$params['t'] ?? 0;
+            $fm->deleteFriendship($user, $target);
+            break;
     }
     $response['status'] = 200;
     $response['ok'] = true;
