@@ -1,5 +1,6 @@
 <?php
 require("inc_friends.php");
+require("inc_notifications.php");
 sec_session_start();
 
 $params = [];
@@ -27,9 +28,11 @@ try {
             $response['message'] = $fm->checkFriendshipStatus($user, $target);
             break;
         case 'POST':
-            $user = $_SESSION['user_id'];
+            $user = new User($_SESSION['user_id'], $_SESSION['username']);
             $target = (int)$params['t'] ?? 0;
-            $fm->sendFriendRequest($user, $target);
+            $nf = new NotificationManager();
+            $nf->sendFriendRequest($user, $target);
+            $fm->sendFriendRequest($user->getID(), $target);
             break;
         case 'DELETE':
             $user = $_SESSION['user_id'];

@@ -6,14 +6,15 @@ if (!defined('USR_MODEL')) {
     class User {
         private int $id = 0;
         private string $username = '';
-        private $since = null;
-        private string $name = '';
-        private string $bio = '';
-        private int $xp = 0;
-        private string $email = '';
+        private $since;
+        private string $name;
+        private string $bio;
+        private int $xp;
+        private string $email;
         private $achievements = [];
         
-        function __construct($id, $username, $since, $name, $email, $xp, $bio) {
+        function __construct(int $id, string $username, $since=null,
+            string $name='', string $email='', int $xp=0, string $bio='') {
             $this->id = $id;
             $this->username = $username;
             $this->since = $since;
