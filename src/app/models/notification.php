@@ -17,7 +17,7 @@ if (!defined('NTF_MODEL')) {
         private int $targetUser = 0;
         private string $sender = '';
         private bool $readFlag = false;
-        private $createdAt = null;
+        private ?DateTime $createdAt = null;
         
         function __construct($id, $type, $target, $title, $content, $sender, $read, $creationDate) {            
             $this->title = $title;
@@ -40,15 +40,18 @@ if (!defined('NTF_MODEL')) {
         function isRead() { return $this->readFlag; }
 
         function toString(): string {
-            return '{ "id": '.$this->id.', '.
-                '"type": '.$this->type.', '.
+            $str = '{ "id": '.$this->id.', '.
+                '"type": '.$this->type->value.', '.
                 '"targetUser": '.$this->targetUser.', '.
                 '"sender": "'.$this->sender.'", '.
                 '"title": "'.$this->title.'", '.
                 '"content": "'.$this->content.'", '.
-                '"readFlag": '.$this->readFlag.', '.
-                '"createdAt": "'.$this->createdAt->format('Y-m-d').'" '.
-                '}';
+                '"readFlag": '.($this->readFlag ? 'true' : 'false');
+            if ($this->createdAt != null) {
+                $str .= ', "createdAt": "'.$this->createdAt->format('Y-m-d').'" ';
+            }
+            $str .= ' }';
+            return $str;
         }
 
     }

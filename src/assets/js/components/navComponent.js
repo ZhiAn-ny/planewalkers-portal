@@ -1,4 +1,5 @@
 import { Pages } from "../enums/pagesEnum.js";
+import { NotificationService } from "../services/notificationService.js";
 
 export class NavComponent extends HTMLElement {
     homeBtn;
@@ -41,7 +42,8 @@ export class NavComponent extends HTMLElement {
             + "border: 1px solid rgba(255, 255, 255, 0.18);"
             + "border-radius: 10px;"
             + "backdrop-filter: blur(5px);"
-            + "box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);";
+            + "box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);"
+            + "padding: 2%;";
         this.ntfPopup.setAttribute("style", style);
         this.ntfPopup.hidden = true;
         this.feedBtn.popup = this.ntfPopup;
@@ -53,11 +55,28 @@ export class NavComponent extends HTMLElement {
         this.feedBtn.addEventListener("click", this.togglePopUp );
     }
 
-    /** Toggles the notifications' popup.
+    /** Toggles the notifications' popup and shows pending notifications.
      * In this function `this` references the feed button.
      */
     togglePopUp() {
         this.popup.hidden = !this.popup.hidden;
+        if (!this.popup.hidden) {
+            NotificationService.getNotifications().then(response => {
+                console.log('get notifications', response);
+                console.log('notifications popup', this.popup);
+                return response.ok ? JSON.parse(response.message) : [];
+            }).then(notifications => {
+                for (let notification of notifications) {
+                    console.log('notification', notification);
+                    let notificationItem = createDiv(notification);
+                    this.popup.appendChild(notificationItem);
+                }
+            });
+        } else {
+            while (this.popup.firstChild) {
+                this.popup.removeChild(this.popup.firstChild);
+            }
+        }
     }
 
     
@@ -76,6 +95,17 @@ function redirect(pageId) {
     }).then(response => {
         window.location.href = response.url;
     }).catch(error => console.error(error));
+}
+function createDiv(notification) {
+    const div = document.createElement('div');
+    div.style.background = 'var(--accent)';
+    div.style.color = 'var(--main)';
+    div.style.borderRadius = '5px';
+    div.style.padding = '3%';
+    div.className = 'notification-item';
+    div.innerHTML = '<p class="notification-title">'+ notification.title +'</p>'
+        + '<p class="notification-text">'+ notification.content +'</p>';
+    return div;
 }
 
 customElements.define('pw-nav', NavComponent);
