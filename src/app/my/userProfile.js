@@ -1,4 +1,10 @@
 let user;
+toastr.options = {
+    positionClass: 'toast-top-center',
+    closeButton: true,
+    progressBar: true,
+    stopOnFocus: true,
+};
 
 function displayUserData() {
     const username = document.getElementById("username");
@@ -50,26 +56,6 @@ function saveUser() {
     update();
 }
 
-function showNotification(notifications) {
-    let showedIndex = 0;
-    const notificationInterval = setInterval(() => {
-        if (showedIndex < notifications.length) {
-            const notif = notifications[showedIndex];
-            const notification = document.createElement('pw-notif');
-            notification.iconClass = notif.faClass;
-            notification.title = notif.name;
-            notification.text = notif.desc;
-            if (notif.xp) {
-                notification.text = notification.text + ' (' + notif.xp + ' XP)';
-            }
-            document.body.appendChild(notification);
-            showedIndex++;
-        } else {
-          clearInterval(notificationInterval);
-        }
-      }, 3000); // Create a new component every 3 seconds
-}
-
 function update() {
     const params = { action: 'update', user: JSON.stringify(user) };
     fetch('http://localhost/pwp/src/app/lib/user_functions.php', {
@@ -83,13 +69,29 @@ function update() {
         }
         return response.json();
     }).then(response => {
-        const notifs = new Array({name:"Save Successful", desc:"", faClass:"fa-solid fa-check"});
-        const message = JSON.parse(response.message);
-        notifs.push(...message.achievements);
         if (response.ok) {
-            showNotification(notifs);
+            toastr.success("Update successful");
+            return JSON.parse(response.message).achievements;
+        } else {
+            throw new Error("UpdateUser() failed");
         }
-    }).catch(error => console.error(error));
+    }).then(achievements => {
+        achievements.forEach(ach => {
+            let text = ach.desc;
+            text += (ach.xp) ? ' (' + ach.xp + ' XP)' : '';
+            const innerHTML =  `<div class="fx-row">
+                <i class="notification-icon fa-xl `+ ach.faClass +`" style="margin-top: 4%;"></i>
+                <div class="notification-content">
+                    <h2 class="notification-title">`+ ach.name +`</h2>
+                    <p class="notification-text">`+ text +`</p>
+                </div>
+            </div>`;
+            toastr.info(innerHTML);
+        })
+    }).catch(error => {
+        toastr.error("Something went wrong!");
+        console.error(error);
+    });
 }
 
 function toProfile() {

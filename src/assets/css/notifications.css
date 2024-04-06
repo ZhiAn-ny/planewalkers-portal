@@ -1,6 +1,26 @@
 pw-notif {
     transition: 0.6s;
 }
+
+.toast-top-center {
+    margin-top: 2%;
+    .toast {
+        background-color: var(--accent-t);
+        opacity: 1 !important;
+        backdrop-filter: blur(5px) !important;
+    }
+    .toast:hover {
+        background-color: var(--accent);
+    }
+}
+.toast-title, .toast-message{
+    font-family: 'Merriweather';
+}
+#toast-container .toast.toast-info { 
+    background-image: url("") !important;
+    padding: 2% 5%;
+}
+
 .notification-container {
     background: var(--accent);
     color: var(--main);
