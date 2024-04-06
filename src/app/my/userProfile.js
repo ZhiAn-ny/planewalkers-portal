@@ -1,10 +1,4 @@
 let user;
-toastr.options = {
-    positionClass: 'toast-top-center',
-    closeButton: true,
-    progressBar: true,
-    stopOnFocus: true,
-};
 
 function displayUserData() {
     const username = document.getElementById("username");
@@ -58,6 +52,12 @@ function saveUser() {
 
 function update() {
     const params = { action: 'update', user: JSON.stringify(user) };
+    toastr.options = {
+        positionClass: 'toast-top-center',
+        closeButton: true,
+        progressBar: true,
+        stopOnFocus: true,
+    };
     fetch('http://localhost/pwp/src/app/lib/user_functions.php', {
         method: 'PATCH',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
