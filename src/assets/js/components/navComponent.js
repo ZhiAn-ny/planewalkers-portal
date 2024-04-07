@@ -66,9 +66,9 @@ export class NavComponent extends HTMLElement {
                 console.log('notifications popup', this.popup);
                 return response.ok ? JSON.parse(response.message) : [];
             }).then(notifications => {
+                let nSrv = new NotificationService();
                 for (let notification of notifications) {
-                    console.log('notification', notification);
-                    let notificationItem = createDiv(notification);
+                    let notificationItem = nSrv.getNotificationDiv(notification);
                     this.popup.appendChild(notificationItem);
                 }
             });
@@ -95,17 +95,6 @@ function redirect(pageId) {
     }).then(response => {
         window.location.href = response.url;
     }).catch(error => console.error(error));
-}
-function createDiv(notification) {
-    const div = document.createElement('div');
-    div.style.background = 'var(--accent)';
-    div.style.color = 'var(--main)';
-    div.style.borderRadius = '5px';
-    div.style.padding = '3%';
-    div.className = 'notification-item';
-    div.innerHTML = '<p class="notification-title">'+ notification.title +'</p>'
-        + '<p class="notification-text">'+ notification.content +'</p>';
-    return div;
 }
 
 customElements.define('pw-nav', NavComponent);

@@ -14,19 +14,24 @@ if (!defined('INC_FRN')) {
 
     class FriendshipManager {
 
-        public function checkFriendshipStatus(int $user1, int $user2): FriendshipStatus {
+        public function checkFriendshipStatus(int $user1, int $user2): array {
             $mysqli = connect();
-            $qry = "SELECT friendship_status FROM friendship
+            $qry = "SELECT friendship_status, user1_id, user2_id
+                FROM friendship
                 WHERE (user1_id = ? OR user2_id = ?) AND (user1_id = ? OR user2_id = ?)";
             $stmt = $mysqli->prepare($qry);
             $stmt->bind_param("iiii", $user1, $user1, $user2, $user2);
             $stmt->execute();
             $stmt->store_result();
-            $stmt->bind_result($status);
+            $stmt->bind_result($status, $sender, $target);
             $stmt->fetch();
             $stmt->close();
             $mysqli->close();
-            return FriendshipStatus::tryFrom($status);
+            return [
+                'status' => $status,
+                'sender' => $sender,
+                'target' => $target
+            ];
         }
 
         public function sendFriendRequest(int $sender, int $target) {

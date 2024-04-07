@@ -25,7 +25,12 @@ try {
         case 'GET':
             $user = $_SESSION['user_id'];
             $target = (int)$params['t'] ?? 0;
-            $response['message'] = $fm->checkFriendshipStatus($user, $target);
+            $friendship = $fm->checkFriendshipStatus($user, $target);
+            $response['message'] = '{'.
+                '"sender":'.$friendship['sender'].','.
+                '"status":"'.$friendship['status'].'",'.
+                '"target":'.$friendship['target'].
+                '}';
             break;
         case 'POST':
             $user = new User($_SESSION['user_id'], $_SESSION['username']);

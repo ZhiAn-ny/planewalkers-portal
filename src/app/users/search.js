@@ -2,6 +2,8 @@
  * Object containing the searched user.
  */
 let user;
+let currentUser;
+getUser('', false).then(user => currentUser = user);
 
 function toDashboard() {
     redirect(1);
@@ -30,9 +32,17 @@ function redirect(pageId) {
 
 function searchUser(username) {
     console.log('searching: ', username);
+    getUser(username).then(users => {
+        showResults(users);
+    }).catch(error => console.error(error));
+}
+
+function getUser(username, searchSimilar = true) {
+    console.log('searching: ', username);
     let url = 'http://localhost/pwp/src/app/lib/user_functions.php';
-    url += '?ssu=1&username=' + username;
-    fetch(url, {
+    url += '?ssu=' + (searchSimilar ? 1 : 0);
+    url += '&username=' + username;
+    return fetch(url, {
         method: 'GET',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     }).then(response => {
@@ -42,8 +52,7 @@ function searchUser(username) {
         return response.json();
     }).then(response => {
         users = JSON.parse(response.message);
-        console.log('users: ', users);
-        showResults(users);
+        return users;
     }).catch(error => console.error(error));
 }
 
@@ -91,9 +100,10 @@ function handleFriendship(other) {
         method: 'GET',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     }).then(response => response.json())
-    .then(response => {
-        updateFriendRequestBtn(response.message);
-        return response.message;
+    .then(response => JSON.parse(response.message))
+    .then(friendship => {
+        updateFriendRequestBtn(friendship);
+        return friendship;
     });
 }
 
@@ -126,19 +136,28 @@ function displayData() {
     achs.innerHTML = getAchsHtml();
 }
 
-function updateFriendRequestBtn(friendshipStatus) {
-    console.log("updateFriendRequestBtn", friendshipStatus);
+function updateFriendRequestBtn(friendship) {
     const btn = document.getElementById("btn-friend");
-    updateFriendRequestIcon(btn, friendshipStatus);
-
-    if (friendshipStatus == "pending" || friendshipStatus == "accepted") {
-        btn.addEventListener("click", () => {
-            revokeFriendRequest().then(() => handleFriendship(user.id));
-        })
-    } else {
-        btn.addEventListener("click", () => {
-            sendFriendRequest().then(() => handleFriendship(user.id));
-        });
+    updateFriendRequestIcon(btn, friendship.status);
+    switch (friendship.status) {
+        case "accepted":
+            btn.addEventListener("click", () => {
+                revokeFriendRequest().then(() => handleFriendship(user.id));
+            })
+            break;
+        case "pending":
+            if (friendship.sender == currentUser.id) {
+                btn.addEventListener("click", () => {
+                    revokeFriendRequest().then(() => handleFriendship(user.id));
+                });
+            } else {
+                btn.hidden = true;
+            }
+            break;
+        default:
+            btn.addEventListener("click", () => {
+                sendFriendRequest().then(() => handleFriendship(user.id));
+            });
     }
 }
 

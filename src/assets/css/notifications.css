@@ -21,18 +21,6 @@ pw-notif {
     padding: 2% 5%;
 }
 
-.notification-container {
-    background: var(--accent);
-    color: var(--main);
-    padding: 3%;
-    border-radius: 10px;
-    display: flex;
-    position: absolute;
-    top: 1%;
-    right: 7%;
-    width: 80%;
-    transition: 0.6s;
-}
 .notification-icon {
     margin: 2% 3% 0% 0%;
 }
@@ -43,4 +31,9 @@ pw-notif {
 .notification-text {
     margin: 0%;
     font-size: 0.9em;
+}
+.btn-notif-action {
+    border-radius: 50px;
+    width: 2.5em;
+    height: 2.5em;
 }
