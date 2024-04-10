@@ -1,4 +1,4 @@
-import { FriendshipService } from "../../assets/js/services/friendshipService";
+import { FriendshipService } from "../../assets/js/services/friendshipService.js";
 
 /**
  * Object containing the searched user.

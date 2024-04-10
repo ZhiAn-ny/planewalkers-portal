@@ -1,4 +1,4 @@
-// import { FriendshipService } from "./friendshipService";
+import { FriendshipService } from "./friendshipService.js";
 
 export class NotificationService {
     /** Reads the notifications for the current user. 
@@ -52,13 +52,14 @@ export class NotificationService {
                     .addEventListener('click', () => {
                         console.log(notification);
                         console.log('---')
-                        // FriendshipService.acceptFriendRequest(notification.sender, notification.target);
+                        const fs = new FriendshipService();
+                        FriendshipService.acceptFriendRequest(notification.sender, notification.target);
                     });
                 div.querySelector('button.btn-notif-action.btn-friend-decline')
                 .addEventListener('click', () => {
                     console.log(notification);
                     console.log('---')
-                    // FriendshipService.rejectFriendRequest(notification.sender, notification.target);
+                    FriendshipService.rejectFriendRequest(notification.sender, notification.target);
                 });
                 div.querySelector('button.btn-notif-action.btn-goto-user')
                 .addEventListener('click', () => {
