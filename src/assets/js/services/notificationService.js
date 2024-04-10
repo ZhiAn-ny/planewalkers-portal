@@ -1,3 +1,5 @@
+// import { FriendshipService } from "./friendshipService";
+
 export class NotificationService {
     /** Reads the notifications for the current user. 
      * @param {boolean} [onlyPending=true] incates if only pending notifications should be read 
@@ -50,11 +52,13 @@ export class NotificationService {
                     .addEventListener('click', () => {
                         console.log(notification);
                         console.log('---')
+                        // FriendshipService.acceptFriendRequest(notification.sender, notification.target);
                     });
                 div.querySelector('button.btn-notif-action.btn-friend-decline')
                 .addEventListener('click', () => {
                     console.log(notification);
                     console.log('---')
+                    // FriendshipService.rejectFriendRequest(notification.sender, notification.target);
                 });
                 div.querySelector('button.btn-notif-action.btn-goto-user')
                 .addEventListener('click', () => {

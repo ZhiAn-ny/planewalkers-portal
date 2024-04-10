@@ -20,6 +20,7 @@ try {
         $params = $decodedData;
     }
     $fm = new FriendshipManager();
+    $nm = new NotificationManager();
     
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':
@@ -35,14 +36,30 @@ try {
         case 'POST':
             $user = new User($_SESSION['user_id'], $_SESSION['username']);
             $target = (int)$params['t'] ?? 0;
-            $nf = new NotificationManager();
-            $nf->sendFriendRequest($user, $target);
+            $friendRequest = NotificationFactory::newFriendRequest($currentUser, $target);
+            $nm->sendNotification($friendRequest);
             $fm->sendFriendRequest($user->getID(), $target);
             break;
         case 'DELETE':
             $user = $_SESSION['user_id'];
             $target = (int)$params['t'] ?? 0;
             $fm->deleteFriendship($user, $target);
+            break;
+        case 'PATCH':
+            $user = new User($_SESSION['user_id'], $_SESSION['username']);
+            $target = (int)$params['target'] ?? 0;
+            if ($target == $_SESSION['user_id'])
+                $target = (int)$params['sender'] ?? 0;
+            $accepted = $params['accepted'] ?? '';
+            if ($accepted === 'true') {
+                $acceptedNotif = NotificationFactory::friendRequestAccepted($user, $target);
+                $fm->acceptFriendRequest($user, $target);
+                $nf->sendNotification($acceptedNotif);
+            } else if ($accepted === 'false') {
+                $fm->deleteFriendship($user->getID(), $target);
+            } else {
+                throw new Exception('Invalid parameter');
+            }
             break;
     }
     $response['status'] = 200;

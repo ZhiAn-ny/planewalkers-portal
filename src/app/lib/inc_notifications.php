@@ -33,11 +33,6 @@ if (!defined('INC_NOTIF')) {
             return $notifications;
         }
 
-        public function sendFriendRequest(User $currentUser, int $target) {
-            $notification = NotificationFactory::newFriendRequest($currentUser, $target);
-            $this->sendNotification($notification);
-        }
-
         private function sendNotification(Notification $notif) {
             $mysqli = connect();
             $qry = "INSERT INTO notifications

@@ -56,5 +56,21 @@ if (!defined('INC_FRN')) {
             $mysqli->close();
         }
 
+        public function acceptFriendRequest(int $user1, int $user2) {
+            $this->acceptFriend($user1, $user2);
+            
+        }
+
+        private function acceptFriend(int $user1, int $user2) {
+            $mysqli = connect(true);
+            $qry = "UPDATE friendship
+                    SET friendship_status = 'accepted'
+                    WHERE (user1_id = ? AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)";
+            $stmt = $mysqli->prepare($qry);
+            $stmt->bind_param('iiii', $user1, $user2, $user2, $user1);
+            $stmt->execute();
+            $stmt->close();
+            $mysqli->close();
+        }
     }
 }

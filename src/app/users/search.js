@@ -1,3 +1,5 @@
+import { FriendshipService } from "../../assets/js/services/friendshipService";
+
 /**
  * Object containing the searched user.
  */
@@ -107,24 +109,6 @@ function handleFriendship(other) {
     });
 }
 
-function sendFriendRequest() {
-    const params = { t: user.id };
-    return fetch('http://localhost/pwp/src/app/lib/friends_functions.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: JSON.stringify(params)
-    });
-}
-
-function revokeFriendRequest() {
-    const params = { t: user.id };
-    return fetch('http://localhost/pwp/src/app/lib/friends_functions.php', {
-        method: 'DELETE',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: JSON.stringify(params)
-    });
-}
-
 function displayData() {
     const username = document.getElementById("username");
     const desc = document.getElementById("userDesc");
@@ -141,23 +125,23 @@ function updateFriendRequestBtn(friendship) {
     updateFriendRequestIcon(btn, friendship.status);
     switch (friendship.status) {
         case "accepted":
-            btn.addEventListener("click", () => {
-                revokeFriendRequest().then(() => handleFriendship(user.id));
-            })
+            btn.addEventListener("click", () => 
+                    FriendshipService.revokeFriendRequest(user.id)
+                        .then(() => handleFriendship(user.id)));
             break;
         case "pending":
             if (friendship.sender == currentUser.id) {
-                btn.addEventListener("click", () => {
-                    revokeFriendRequest().then(() => handleFriendship(user.id));
-                });
+                btn.addEventListener("click", () => 
+                    FriendshipService.revokeFriendRequest(user.id)
+                        .then(() => handleFriendship(user.id)));
             } else {
                 btn.hidden = true;
             }
             break;
         default:
-            btn.addEventListener("click", () => {
-                sendFriendRequest().then(() => handleFriendship(user.id));
-            });
+            btn.addEventListener("click", () => 
+                FriendshipService.sendFriendRequest(user.id)
+                    .then(() => handleFriendship(user.id)));
     }
 }
 
