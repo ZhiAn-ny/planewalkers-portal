@@ -43,6 +43,9 @@ export class NavComponent extends HTMLElement {
             + "border-radius: 10px;"
             + "backdrop-filter: blur(5px);"
             + "box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);"
+            + "overflow: auto;"
+            + "flex-direction: column;"
+            + "gap: 2%;"
             + "padding: 2%;";
         this.ntfPopup.setAttribute("style", style);
         this.ntfPopup.hidden = true;
@@ -61,6 +64,7 @@ export class NavComponent extends HTMLElement {
     togglePopUp() {
         this.popup.hidden = !this.popup.hidden;
         if (!this.popup.hidden) {
+            this.popup.style.display = "flex";
             NotificationService.getNotifications().then(response => {
                 return response.ok ? JSON.parse(response.message) : [];
             }).then(notifications => {
@@ -71,7 +75,7 @@ export class NavComponent extends HTMLElement {
                 }
                 if (this.popup.children.length == 0) {
                     let p = document.createElement("p");
-                    p.innerText = "No notifications.";
+                    p.innerText = "No quests for now, await the next adventure.";
                     p.style.textAlign = "center";
                     p.style.color = "var(--main)";
                     p.style.fontWeight = "bold";
@@ -80,6 +84,7 @@ export class NavComponent extends HTMLElement {
                 }
             });
         } else {
+            this.popup.style.display = "none";
             while (this.popup.firstChild) {
                 this.popup.removeChild(this.popup.firstChild);
             }

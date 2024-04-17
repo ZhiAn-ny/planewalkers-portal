@@ -14,10 +14,17 @@ form {
         border: 0px;
         border-radius: 5px;
         padding-left: 1em;
-        font-family: 'Merriweather';
         color: var(--false-black);
     }
     button {
         margin-top: 10%;
     }
+}
+
+input {
+    font-family: 'Open Sans', sans-serif;
+    /* font-family: 'Merriweather', serif; */
+}
+input:focus {
+    outline: none;
 }

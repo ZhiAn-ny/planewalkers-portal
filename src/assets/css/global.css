@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Merriweather&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 @import url('notifications.css');
 @import url('buttons.css');
 @import url('forms.css');
@@ -11,8 +12,8 @@
     --m-beige: #efd4b5;
     --dark-beige: #c08e53;
     --dark-beige-t: #c08e53aa;
-    --m-olive: #776d28;
-    --m-olive-t: #776d28aa;
+    --m-olive: #4D551C;
+    --m-olive-t: #4D551Caa;
     --transparent: #00000000;
 
     --main: var(--m-beige);
@@ -20,16 +21,20 @@
     --mid-t: var(--dark-beige-t);
     --accent: var(--m-olive);
     --accent-t: var(--m-olive-t);
-    --error-color: darkred;
+    --error-color: var(--rust-red);
 }
 
 body {
     padding: 0 7%;
-    /* background-image: url(../images/bg-lines.jpg); */
+    background-image: url(../images/bg-line.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
     background-color: var(--main);
     background-blend-mode: multiply;
     color: var(--false-black);
-    font-family: 'Merriweather', serif;
+    font-family: 'Open Sans';
 }
 
 nav {
@@ -46,9 +51,20 @@ nav {
     }
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Merriweather', serif;
+}
 h1 {
     color: var(--accent);
     font-size: 1.5em;
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
 }
 
 .outline {
