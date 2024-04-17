@@ -41,8 +41,8 @@ export class FriendshipService {
         .then(response => JSON.parse(response.message));
     }
 
-    static acceptFriendRequest(sender, target) {
-        const params = { sender: sender, target: target, accepted: 'true' };
+    static acceptFriendRequest(notificationID, sender, target) {
+        const params = { sender: sender, t: target, accepted: 'true', nid: notificationID };
         return fetch('http://localhost/pwp/src/app/lib/friends_functions.php', {
             method: 'PATCH',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -50,8 +50,8 @@ export class FriendshipService {
         });
     }
 
-    static rejectFriendRequest(sender, target) {
-        const params = { sender: sender, target: target, accepted: 'false' };
+    static rejectFriendRequest(notificationID, sender, target) {
+        const params = { sender: sender, t: target, accepted: 'false', nid: notificationID };
         return fetch('http://localhost/pwp/src/app/lib/friends_functions.php', {
             method: 'PATCH',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
