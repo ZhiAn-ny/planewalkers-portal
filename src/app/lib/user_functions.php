@@ -41,6 +41,9 @@ try {
                 $username = $_SESSION['username'];
             }
             $res = $userManager->getUser($username);
+            if ($res == null) {
+                $res = $userManager->getUserFromID((int)$_SESSION['user_id']);
+            }
             if ($readAchievements == '1') {
                 $achManager = new AchievementsManager();
                 $achs = $achManager->getUserAchievements($res);
