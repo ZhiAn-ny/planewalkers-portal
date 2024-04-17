@@ -1,5 +1,3 @@
-import { FriendshipService } from "../../assets/js/services/friendshipService.js";
-
 /**
  * Object containing the searched user.
  */
@@ -126,22 +124,31 @@ function updateFriendRequestBtn(friendship) {
     switch (friendship.status) {
         case "accepted":
             btn.addEventListener("click", () => 
-                    FriendshipService.revokeFriendRequest(user.id)
-                        .then(() => handleFriendship(user.id)));
+            fetch('http://localhost/pwp/src/app/lib/friends_functions.php', {
+                method: 'DELETE',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: JSON.stringify({ t: user.id })
+            }).then(() => handleFriendship(user.id)));
             break;
         case "pending":
             if (friendship.sender == currentUser.id) {
                 btn.addEventListener("click", () => 
-                    FriendshipService.revokeFriendRequest(user.id)
-                        .then(() => handleFriendship(user.id)));
+                fetch('http://localhost/pwp/src/app/lib/friends_functions.php', {
+                    method: 'DELETE',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    body: JSON.stringify({ t: user.id })
+                }).then(() => handleFriendship(user.id)));
             } else {
                 btn.hidden = true;
             }
             break;
         default:
             btn.addEventListener("click", () => 
-                FriendshipService.sendFriendRequest(user.id)
-                    .then(() => handleFriendship(user.id)));
+            fetch('http://localhost/pwp/src/app/lib/friends_functions.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: JSON.stringify({ t: user.id})
+            }).then(() => handleFriendship(user.id)));
     }
 }
 

@@ -34,11 +34,11 @@ try {
                 '}';
             break;
         case 'POST':
-            $user = new User($_SESSION['user_id'], $_SESSION['username']);
+            $currentUser = new User($_SESSION['user_id'], $_SESSION['username']);
             $target = (int)$params['t'] ?? 0;
             $friendRequest = NotificationFactory::newFriendRequest($currentUser, $target);
             $nm->sendNotification($friendRequest);
-            $fm->sendFriendRequest($user->getID(), $target);
+            $fm->sendFriendRequest($currentUser->getID(), $target);
             break;
         case 'DELETE':
             $user = $_SESSION['user_id'];
@@ -47,16 +47,17 @@ try {
             break;
         case 'PATCH':
             $user = new User($_SESSION['user_id'], $_SESSION['username']);
-            $target = (int)$params['target'] ?? 0;
-            if ($target == $_SESSION['user_id'])
-                $target = (int)$params['sender'] ?? 0;
+            $reqTarget = (int)$params['t'] ?? 0;
+            $reqSender = (int)$params['sender'] ?? 0;
+            $notifId = (int)$params['nid'] ?? 0;
             $accepted = $params['accepted'] ?? '';
             if ($accepted === 'true') {
-                $acceptedNotif = NotificationFactory::friendRequestAccepted($user, $target);
-                $fm->acceptFriendRequest($user, $target);
-                $nf->sendNotification($acceptedNotif);
+                $fm->acceptFriendRequest($reqSender, $reqTarget);
+                $nm->markAsRead($notifId);
+                $nm->sendNotification(NotificationFactory::friendRequestAccepted($user, $reqSender));
             } else if ($accepted === 'false') {
-                $fm->deleteFriendship($user->getID(), $target);
+                $fm->deleteFriendship($reqSender, $reqTarget);
+                $nm->markAsRead($notifId);
             } else {
                 throw new Exception('Invalid parameter');
             }

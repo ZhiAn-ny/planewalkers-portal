@@ -23,6 +23,15 @@ if (!defined('INC_FRN')) {
             $stmt->bind_param("iiii", $user1, $user1, $user2, $user2);
             $stmt->execute();
             $stmt->store_result();
+            if ($stmt->num_rows == 0) {
+                $stmt->close();
+                $mysqli->close();
+                return [
+                    'status' => FriendshipStatus::NOT_FOUND->value,
+                    'sender' => $user1,
+                    'target' => $user2
+                ];
+            }
             $stmt->bind_result($status, $sender, $target);
             $stmt->fetch();
             $stmt->close();
@@ -62,7 +71,7 @@ if (!defined('INC_FRN')) {
         }
 
         private function acceptFriend(int $user1, int $user2) {
-            $mysqli = connect(true);
+            $mysqli = connect();
             $qry = "UPDATE friendship
                     SET friendship_status = 'accepted'
                     WHERE (user1_id = ? AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)";
