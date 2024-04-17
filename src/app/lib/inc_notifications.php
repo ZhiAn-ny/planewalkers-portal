@@ -8,7 +8,7 @@ if (!defined('INC_NOTIF')) {
 
     class NotificationManager {
 
-        public function read(int $userID, $onlyPending = true): array {
+        public function read(int $userID, $onlyPending = true, NotificationType $type = null, string $sender = ""): array {
             $notifications = [];
             $mysqli = connect();
             $qry = "SELECT id, title, content, notification_type, sender,
@@ -17,6 +17,12 @@ if (!defined('INC_NOTIF')) {
                 WHERE target_user = ?";
             if ($onlyPending) {
                 $qry .= " AND read_flag = 0";
+            }
+            if ($type != null) {
+                $qry .= " AND notification_type = " . $type->value;
+            }
+            if ($sender != null) {
+                $qry .= " AND sender = " . $sender;
             }
             $stmt = $mysqli->prepare($qry);
             $stmt->bind_param("i", $userID);
@@ -54,8 +60,8 @@ if (!defined('INC_NOTIF')) {
         public function markAsRead(int $notifID) {
             $mysqli = connect();
             $qry = "UPDATE notifications
-            SET read_flag = 1
-            WHERE id = ?";
+                SET read_flag = 1
+                WHERE id = ?";
             $stmt = $mysqli->prepare($qry);
             $stmt->bind_param("i", $notifID);
             $stmt->execute();
@@ -63,5 +69,15 @@ if (!defined('INC_NOTIF')) {
             $mysqli->close();
         }
 
+        public function delete(int $notificationID) {
+            $mysqli = connect(true);
+            $qry = "DELETE FROM notifications
+                WHERE id = ?";
+            $stmt = $mysqli->prepare($qry);
+            $stmt->bind_param("i", $notificationID);
+            $stmt->execute();
+            $stmt->close();
+            $mysqli->close();
+        }
     }
 }

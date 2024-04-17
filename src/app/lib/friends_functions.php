@@ -36,14 +36,26 @@ try {
         case 'POST':
             $currentUser = new User($_SESSION['user_id'], $_SESSION['username']);
             $target = (int)$params['t'] ?? 0;
-            $friendRequest = NotificationFactory::newFriendRequest($currentUser, $target);
-            $nm->sendNotification($friendRequest);
+            $friendRequests = $nm->read(
+                $target, true, NotificationType::FRIEND_REQUEST, (int)$_SESSION['user_id']
+            );
+            if (count($friendRequests) == 0) {
+                $friendRequest = NotificationFactory::newFriendRequest($currentUser, $target);
+                $nm->sendNotification($friendRequest);
+            }
             $fm->sendFriendRequest($currentUser->getID(), $target);
             break;
         case 'DELETE':
             $user = $_SESSION['user_id'];
             $target = (int)$params['t'] ?? 0;
             $fm->deleteFriendship($user, $target);
+            $friendRequests = $nm->read(
+                $target, true, NotificationType::FRIEND_REQUEST, (int)$_SESSION['user_id']
+            );
+            if (count($friendRequests) == 1) {
+                $nid = $friendRequests[0]->getID();
+                $nm->delete($nid);
+            }
             break;
         case 'PATCH':
             $user = new User($_SESSION['user_id'], $_SESSION['username']);
