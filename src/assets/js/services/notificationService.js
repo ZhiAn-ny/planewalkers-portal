@@ -40,6 +40,18 @@ export class NotificationService {
         return div;
     }
 
+    #setGoToUserAction(btn, notification) {
+        btn.addEventListener('click', () => {
+            fetch('http://localhost/pwp/src/app/lib/user_functions.php?a=0&uid=' + notification.sender, {
+                method: 'GET',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).then(response => response.ok ? response.json() : null)
+            .then(response => JSON.parse(response.message))
+            .then(user => window.location.href = 'http://localhost/pwp/src/app/users/?s=' + user.username)
+            .catch(error => console.error(error));
+        });
+    }
+
     #getNotifActionsDiv(notification) {
         const div = document.createElement('div');
         div.className = 'action-container';
@@ -52,21 +64,15 @@ export class NotificationService {
                 div.querySelector('button.btn-notif-action.btn-friend-accept')
                     .addEventListener('click', () => FriendshipService
                         .acceptFriendRequest(notification.id, notification.sender, notification.targetUser)
-                        .then((r) => {
-                            console.log(div);
-                            div.hidden = r.ok;
-                        }));
+                        .then((r) => div.hidden = r.ok));
                 div.querySelector('button.btn-notif-action.btn-friend-decline')
                 .addEventListener('click', () => FriendshipService
                     .rejectFriendRequest(notification.id, notification.sender, notification.targetUser));
-                div.querySelector('button.btn-notif-action.btn-goto-user')
-                .addEventListener('click', () => {
-                    console.log(notification);
-                    console.log('---')
-                });
+                this.#setGoToUserAction(div.querySelector('button.btn-notif-action.btn-goto-user'), notification);
                 break;
             case 2: //NotificationTypeEnum.friendAccepted
-                div.innerHTML = '<button class="button-primary" onclick="NotificationManager.openFriendProfile(this)">Open Profile</button>';
+                div.innerHTML = '<button class="btn-notif-action btn-goto-user"><i class="fa-lg fa-solid fa-angles-right"></i></button>';
+                this.#setGoToUserAction(div.querySelector('button.btn-notif-action.btn-goto-user'), notification);
                 break;
         }
         return div;

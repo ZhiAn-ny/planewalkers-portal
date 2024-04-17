@@ -7,23 +7,34 @@ $response = array();
 $response['status'] = 500;
 $response['ok'] = false;
 try {
-    if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
+    $userManager = new UserManager();
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $params = $_GET;
+        $params['uid'] = isset($params['uid']) ? (int)$params['uid'] : 0;
+        $params['username'] = isset($params['username']) ? $params['username'] : '';
+        $params['a'] = isset($params['a']) ? $params['a'] : '1';
+        $params['ssu'] = isset($params['ssu']) ? $params['ssu'] : '0';
+    } else {
         $rawPostData = file_get_contents("php://input");
         $decodedData = json_decode($rawPostData, true);
         if ($decodedData == null && json_last_error() != JSON_ERROR_NONE) {
             $response['status'] = 400;
             throw new Exception('Invalid payload.');
         }
-        $userManager = new UserManager();
-        $u = json_decode($decodedData['user']);
+        $params = $decodedData;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
+        $u = json_decode($params['user']);
         $user = new User($u->id, $u->username, $u->since, $u->name, $u->email, $u->xp, $u->bio);
         $response['message'] = $userManager->updateUser($user);
     } 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $username = $_GET['username'] ?? '';
-        $readAchievements = $_GET['a'] ?? '1';
-        $searchSimilarUsername = $_GET['ssu'] ?? '0';
-        $userManager = new UserManager();
+        $username = $params['username'];
+        $uid = $params['uid'];
+        $readAchievements = $params['a'];
+        $searchSimilarUsername = $params['ssu'];
+
         if ($searchSimilarUsername == '1') {
             $maxCount = 15;
             $arr = $userManager->getUsernameLike($username, $maxCount);
@@ -37,10 +48,15 @@ try {
             $res = $res.']';
             $response['message'] = $res;
         } else {
-            if ($username == null || $username == '') {
-                $username = $_SESSION['username'];
+            $res;
+            if ($uid > 0) {
+                $res = $userManager->getUserFromID($uid);
+            } else {
+                if ($username == null || $username == '') {
+                    $username = $_SESSION['username'];
+                }
+                $res = $userManager->getUser($username);
             }
-            $res = $userManager->getUser($username);
             if ($res == null) {
                 $res = $userManager->getUserFromID((int)$_SESSION['user_id']);
             }
