@@ -62,8 +62,6 @@ export class NavComponent extends HTMLElement {
         this.popup.hidden = !this.popup.hidden;
         if (!this.popup.hidden) {
             NotificationService.getNotifications().then(response => {
-                console.log('get notifications', response);
-                console.log('notifications popup', this.popup);
                 return response.ok ? JSON.parse(response.message) : [];
             }).then(notifications => {
                 let nSrv = new NotificationService();

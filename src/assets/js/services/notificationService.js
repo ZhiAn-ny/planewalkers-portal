@@ -39,6 +39,7 @@ export class NotificationService {
             + '<p class="notification-text">'+ notification.content +'</p>';
         return div;
     }
+
     #getNotifActionsDiv(notification) {
         const div = document.createElement('div');
         div.className = 'action-container';
@@ -49,18 +50,15 @@ export class NotificationService {
                     + '<button class="btn-notif-action btn-friend-decline"><i class="fa-lg fa-solid fa-xmark"></i></button>'
                     + '<button class="btn-notif-action btn-goto-user"><i class="fa-lg fa-solid fa-angles-right"></i></button>';
                 div.querySelector('button.btn-notif-action.btn-friend-accept')
-                    .addEventListener('click', () => {
-                        console.log(notification);
-                        console.log('---')
-                        const fs = new FriendshipService();
-                        FriendshipService.acceptFriendRequest(notification.sender, notification.target);
-                    });
+                    .addEventListener('click', () => FriendshipService
+                        .acceptFriendRequest(notification.id, notification.sender, notification.targetUser)
+                        .then((r) => {
+                            console.log(div);
+                            div.hidden = r.ok;
+                        }));
                 div.querySelector('button.btn-notif-action.btn-friend-decline')
-                .addEventListener('click', () => {
-                    console.log(notification);
-                    console.log('---')
-                    FriendshipService.rejectFriendRequest(notification.sender, notification.target);
-                });
+                .addEventListener('click', () => FriendshipService
+                    .rejectFriendRequest(notification.id, notification.sender, notification.targetUser));
                 div.querySelector('button.btn-notif-action.btn-goto-user')
                 .addEventListener('click', () => {
                     console.log(notification);

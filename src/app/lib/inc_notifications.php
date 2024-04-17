@@ -33,7 +33,7 @@ if (!defined('INC_NOTIF')) {
             return $notifications;
         }
 
-        private function sendNotification(Notification $notif) {
+        public function sendNotification(Notification $notif) {
             $mysqli = connect();
             $qry = "INSERT INTO notifications
             (notification_type, target_user, title, content, sender)
@@ -50,5 +50,18 @@ if (!defined('INC_NOTIF')) {
             $stmt->close();
             $mysqli->close();
         }
+
+        public function markAsRead(int $notifID) {
+            $mysqli = connect();
+            $qry = "UPDATE notifications
+            SET read_flag = 1
+            WHERE id = ?";
+            $stmt = $mysqli->prepare($qry);
+            $stmt->bind_param("i", $notifID);
+            $stmt->execute();
+            $stmt->close();
+            $mysqli->close();
+        }
+
     }
 }
