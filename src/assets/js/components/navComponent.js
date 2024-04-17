@@ -69,6 +69,15 @@ export class NavComponent extends HTMLElement {
                     let notificationItem = nSrv.getNotificationDiv(notification);
                     this.popup.appendChild(notificationItem);
                 }
+                if (this.popup.children.length == 0) {
+                    let p = document.createElement("p");
+                    p.innerText = "No notifications.";
+                    p.style.textAlign = "center";
+                    p.style.color = "var(--main)";
+                    p.style.fontWeight = "bold";
+                    p.style.marginTop = "20%";
+                    this.popup.appendChild(p);
+                }
             });
         } else {
             while (this.popup.firstChild) {
