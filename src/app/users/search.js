@@ -32,9 +32,9 @@ function redirect(pageId) {
 
 function searchUser(username) {
     console.log('searching: ', username);
-    getUser(username).then(users => {
-        showResults(users);
-    }).catch(error => console.error(error));
+    getUser(username)
+        .then(users => showResults(users))
+        .catch(error => console.error(error));
 }
 
 function getUser(username, searchSimilar = true) {
@@ -45,21 +45,15 @@ function getUser(username, searchSimilar = true) {
     return fetch(url, {
         method: 'GET',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    }).then(response => {
-        if (!response.ok) {
-            throw new Error("GetUsernameLike() failed");
-        }
-        return response.json();
-    }).then(response => {
-        users = JSON.parse(response.message);
-        return users;
-    }).catch(error => console.error(error));
+    }).then(response => response.ok ? response.json() : null)
+    .then(response => JSON.parse(response.message))
+    .catch(error => console.error(error));
 }
 
 function createResultItem(user) {
     const div = document.createElement('div');
     div.className = 'search-item';
-    div.innerHTML = '<p>'+user+'</p>';
+    div.innerHTML = '<p>' + user + '</p>';
     div.addEventListener('click', () => getUserPage(user))
     return div;
 }

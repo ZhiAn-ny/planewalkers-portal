@@ -7,18 +7,25 @@ $response = array();
 $response['status'] = 500;
 $response['ok'] = false;
 try {
-    if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $params = $_GET;
+    } else {
         $rawPostData = file_get_contents("php://input");
         $decodedData = json_decode($rawPostData, true);
         if ($decodedData == null && json_last_error() != JSON_ERROR_NONE) {
             $response['status'] = 400;
             throw new Exception('Invalid payload.');
         }
-        $response['message'] = 'TODO';
+        $params = $decodedData;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
+        $nid = $params['nid'] ?? 0;
+        $notifManager->markAsRead($nid);
     } 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $user = $_SESSION['user_id'] ?? '';
-        $onlyPending = $_GET['p'] ?? true;
+        $onlyPending = $params['p'] ?? true;
         $notifications = $notifManager->read($user, $onlyPending);
         $resultStr = '[';
         foreach ($notifications as $notification) {
