@@ -1,3 +1,7 @@
+/**
+ * @requires toastr.js library. It can be imported by adding the following snippet in the html file:
+ * `<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>`
+ */
 export class FriendshipService {
     /**
      * Sends a friend request to the specified user.
@@ -47,6 +51,16 @@ export class FriendshipService {
             method: 'PATCH',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: JSON.stringify(params)
+        }).then(response => {
+            if (response.ok) {
+                toastr.options = {
+                    positionClass: 'toast-top-center',
+                    closeButton: true,
+                    progressBar: true,
+                    stopOnFocus: true,
+                };
+                toastr.success('Friend request accepted.');
+            }
         });
     }
 
@@ -56,6 +70,16 @@ export class FriendshipService {
             method: 'PATCH',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: JSON.stringify(params)
+        }).then(response => {
+            if (response.ok) {
+                toastr.options = {
+                    positionClass: 'toast-top-center',
+                    closeButton: true,
+                    progressBar: true,
+                    stopOnFocus: true,
+                };
+                toastr.success('Friend request rejected.');
+            }
         });
     }
 

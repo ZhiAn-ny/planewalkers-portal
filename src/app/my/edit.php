@@ -6,11 +6,11 @@
     <link href="./userProfile.css" rel="stylesheet" type="text/css"/>
     <link href="../../assets/css/global.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <script src="https://kit.fontawesome.com/93710f8f6f.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="userProfile.js" type="text/javascript"></script>
     <script src="../../assets/js/components/componentsModule.js" type="module"></script>
-    <script src="https://kit.fontawesome.com/93710f8f6f.js" crossorigin="anonymous"></script>
     <!--<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" type="text/javascript"></script> -->
     <title>Planeswalker's Portal</title>
     

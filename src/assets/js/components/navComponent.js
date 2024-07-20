@@ -1,6 +1,12 @@
 import { Pages } from "../enums/pagesEnum.js";
 import { NotificationService } from "../services/notificationService.js";
 
+/**
+ * Defines a reusable component for the navigation bar.
+ * 
+ * @requires toastr.js library. It can be imported by adding the following snippet in the html file:
+ * `<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>`
+ */
 export class NavComponent extends HTMLElement {
     homeBtn;
     feedBtn;

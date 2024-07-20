@@ -1,5 +1,9 @@
 import { FriendshipService } from "./friendshipService.js";
 
+/**
+ * @requires toastr.js library. It can be imported by adding the following snippet in the html file:
+ * `<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>`
+ */
 export class NotificationService {
     /** Reads the notifications for the current user. 
      * @param {boolean} [onlyPending=true] incates if only pending notifications should be read 
@@ -67,8 +71,11 @@ export class NotificationService {
                 method: 'PATCH',
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                 body: JSON.stringify({nid: notification.id})
-            }).then(response => response.ok ? response.json() : null)
-            .catch(error => console.error(error));
+            }).then(response => {
+                if (response.ok) {
+                    this.#toast('Marked as read.')
+                }
+            }).catch(error => console.error(error));
         });
         div.appendChild(btn);
     }
@@ -96,6 +103,18 @@ export class NotificationService {
                 break;
         }
         return div;
+    }
+
+    /* Utility */
+
+    #toast(message) {
+        toastr.options = {
+            positionClass: 'toast-top-center',
+            closeButton: true,
+            progressBar: true,
+            stopOnFocus: true,
+        };
+        toastr.success(message);
     }
 
 }
